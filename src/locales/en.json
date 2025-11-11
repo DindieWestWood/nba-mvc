@@ -1,0 +1,37 @@
+{
+  "nav": {
+    "ariaLabel": "Primary",
+    "home": "Home",
+    "leaderboard": "Leaderboard",
+    "stats": "Stats"
+  },
+  "sections": {
+    "home": {
+      "title": "Home",
+      "description": "Welcome to the NBA MVC playground. Choose a section in the navigation to dive into the data."
+    },
+    "leaderboard": {
+      "title": "Leaderboard",
+      "description": "Standings, rankings, and recent streaks will appear here."
+    },
+    "stats": {
+      "title": "Stats",
+      "description": "Player and team metrics, advanced charts, and filters coming soon."
+    }
+  },
+  "theme": {
+    "toggle": {
+      "toLight": "Switch to light theme",
+      "toDark": "Switch to dark theme"
+    },
+    "modeLabel": {
+      "light": "Light",
+      "dark": "Dark"
+    }
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "fr": "Français"
+  }
+}

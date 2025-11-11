@@ -1,0 +1,37 @@
+{
+  "nav": {
+    "ariaLabel": "Navigation principale",
+    "home": "Accueil",
+    "leaderboard": "Classement",
+    "stats": "Statistiques"
+  },
+  "sections": {
+    "home": {
+      "title": "Accueil",
+      "description": "Bienvenue sur le terrain NBA MVC. Choisissez une section dans la navigation pour explorer les données."
+    },
+    "leaderboard": {
+      "title": "Classement",
+      "description": "Les classements, les positions et les séries récentes seront affichés ici."
+    },
+    "stats": {
+      "title": "Statistiques",
+      "description": "Les métriques des joueurs et des équipes, des graphiques avancés et des filtres arrivent bientôt."
+    }
+  },
+  "theme": {
+    "toggle": {
+      "toLight": "Passer au thème clair",
+      "toDark": "Passer au thème sombre"
+    },
+    "modeLabel": {
+      "light": "Clair",
+      "dark": "Sombre"
+    }
+  },
+  "language": {
+    "label": "Langue",
+    "en": "Anglais",
+    "fr": "Français"
+  }
+}

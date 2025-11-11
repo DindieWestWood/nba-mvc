@@ -1,6 +1,12 @@
+<script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+</script>
+
 <template>
   <section class="panel">
-    <h1>Stats</h1>
-    <p>Player and team metrics, advanced charts, and filters coming soon.</p>
+    <h1>{{ t('sections.stats.title') }}</h1>
+    <p>{{ t('sections.stats.description') }}</p>
   </section>
 </template>

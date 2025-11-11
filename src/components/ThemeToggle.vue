@@ -1,13 +1,16 @@
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useTheme } from '../composables/useTheme'
 
+const { t } = useI18n()
 const { theme, toggleTheme, isDark } = useTheme()
 
 const label = computed(() =>
-  isDark.value ? 'Switch to light theme' : 'Switch to dark theme'
+  isDark.value ? t('theme.toggle.toLight') : t('theme.toggle.toDark')
 )
 
+const modeLabel = computed(() => t(`theme.modeLabel.${theme.value}`))
 const icon = computed(() => (isDark.value ? '🌙' : '☀️'))
 </script>
 
@@ -21,7 +24,7 @@ const icon = computed(() => (isDark.value ? '🌙' : '☀️'))
   >
     <span class="visually-hidden">{{ label }}</span>
     <span aria-hidden="true" class="theme-toggle__icon">{{ icon }}</span>
-    <span class="theme-toggle__text">{{ theme }}</span>
+    <span class="theme-toggle__text">{{ modeLabel }}</span>
   </button>
 </template>
 

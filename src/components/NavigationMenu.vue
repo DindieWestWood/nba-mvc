@@ -1,13 +1,16 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useNavigation } from '../composables/useNavigation'
+import LanguageSwitcher from './LanguageSwitcher.vue'
 import ThemeToggle from './ThemeToggle.vue'
 
+const { t } = useI18n()
 const { items } = useNavigation()
 </script>
 
 <template>
-  <nav class="primary-nav" aria-label="Primary">
+  <nav class="primary-nav" :aria-label="t('nav.ariaLabel')">
     <div class="primary-nav__inner">
       <ul class="primary-nav__list">
         <li v-for="item in items" :key="item.id" class="primary-nav__item">
@@ -17,12 +20,15 @@ const { items } = useNavigation()
             :to="item.path"
             :aria-current="item.isActive ? 'page' : undefined"
           >
-            <span class="primary-nav__text">{{ item.label }}</span>
+            <span class="primary-nav__text">{{ t(item.labelKey) }}</span>
           </RouterLink>
         </li>
       </ul>
 
-      <ThemeToggle class="primary-nav__toggle" />
+      <div class="primary-nav__controls">
+        <LanguageSwitcher />
+        <ThemeToggle class="primary-nav__toggle" />
+      </div>
     </div>
   </nav>
 </template>
@@ -84,7 +90,35 @@ const { items } = useNavigation()
   color: var(--color-nav-link-active-text);
 }
 
+.primary-nav__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .primary-nav__toggle {
   flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .primary-nav__inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .primary-nav__list {
+    width: 100%;
+  }
+
+  .primary-nav__item {
+    flex: 1 1 auto;
+  }
+
+  .primary-nav__controls {
+    width: 100%;
+    justify-content: space-between;
+  }
 }
 </style>

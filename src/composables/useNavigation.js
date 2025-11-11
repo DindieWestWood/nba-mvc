@@ -2,9 +2,9 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const NAV_ITEMS = Object.freeze([
-  { id: 'home', label: 'Home', path: '/' },
-  { id: 'leaderboard', label: 'Leaderboard', path: '/leaderboard' },
-  { id: 'stats', label: 'Stats', path: '/stats' },
+  { id: 'home', labelKey: 'nav.home', path: '/' },
+  { id: 'leaderboard', labelKey: 'nav.leaderboard', path: '/leaderboard' },
+  { id: 'stats', labelKey: 'nav.stats', path: '/stats' },
 ])
 
 export function useNavigation() {
