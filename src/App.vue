@@ -16,9 +16,9 @@ import NavigationMenu from './components/NavigationMenu.vue'
 <style scoped>
 .app-shell {
   min-height: 100vh;
-  background: #f3f4f6;
-  color: #111827;
-  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  background: var(--surface-body);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-base);
 }
 
 .content {
@@ -27,20 +27,20 @@ import NavigationMenu from './components/NavigationMenu.vue'
   gap: 1.5rem;
 }
 
-.panel {
-  background: #fff;
+:global(.panel) {
+  background: var(--surface-panel);
   border-radius: 1rem;
   padding: 1.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
+  border: 1px solid var(--surface-panel-border);
+  box-shadow: var(--surface-panel-shadow);
 }
 
-.panel h1,
-.panel h2 {
+:global(.panel h1),
+:global(.panel h2) {
   margin-bottom: 0.5rem;
 }
 
-.panel p {
+:global(.panel p) {
   margin: 0;
   line-height: 1.6;
 }
