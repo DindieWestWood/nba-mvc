@@ -16,7 +16,8 @@ const { items } = useNavigation()
         :to="item.path"
         :aria-current="item.isActive ? 'page' : undefined"
       >
-        <span class="nav-links__text">{{ t(item.labelKey) }}</span>
+        <component :is="item.icon"></component>
+        <!-- <span class="nav-links__text">{{ t(item.labelKey) }}</span> -->
       </RouterLink>
     </li>
   </ul>
@@ -26,7 +27,7 @@ const { items } = useNavigation()
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 0.75rem;
+  gap: 0.25rem;
   margin: 0;
   padding: 0;
 }
@@ -36,19 +37,22 @@ const { items } = useNavigation()
 }
 
 .nav-links__link {
-  display: block;
-  padding: 0.65rem 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 44px;
   border-radius: 999px;
   text-align: center;
   text-decoration: none;
   font-weight: 600;
   color: var(--color-nav-link);
-  border: 2px solid transparent;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  border-bottom: 2px solid transparent;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2 ease, -webkit-box-shadow 0.2 ease;
 }
 
 .nav-links__link:hover {
-  border-color: var(--color-nav-link-hover-border);
+  background-color: var(--color-nav-link-hover-bg);
 }
 
 .nav-links__link:focus-visible {
@@ -56,8 +60,30 @@ const { items } = useNavigation()
   outline-offset: 3px;
 }
 
-.nav-links__link--active {
-  background: var(--color-nav-link-active-bg);
+.nav-links__link--active,
+.nav-links__link--active:hover {
+  background: linear-gradient(0deg, var(--color-nav-link-active-bg-g0) 0%, var(--color-nav-link-active-bg-g100) 100%);
   color: var(--color-nav-link-active-text);
+  border-bottom: 2px solid var(--accent-color-500);
+  -webkit-box-shadow: inset -2px -2px 6px 4px rgba(0,0,0,0.05), 
+                      inset 2px 2px 6px 4px rgba(255,255,255,0.2),
+                      rgba(99, 99, 99, 0.2) 2px 2px 8px 0px;
+  box-shadow: inset -2px -2px 6px 6px rgba(0,0,0,0.05), 
+              inset 2px 2px 6px 6px rgba(255,255,255,0.2),
+              rgba(99, 99, 99, 0.2) 2px 2px 8px 0px;
+}
+
+.nav-links__link--active:hover {
+  pointer-events: none;
+}
+
+@media screen and (min-width: 1280px) {
+  .nav-links {
+    flex-direction: column;
+  }
+
+  .nav-links__item {
+    max-width: 44px;
+  }
 }
 </style>

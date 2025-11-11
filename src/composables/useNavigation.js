@@ -1,10 +1,12 @@
+import { ChartLine, House, LayoutList } from 'lucide-vue-next'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const NAV_ITEMS = Object.freeze([
-  { id: 'home', labelKey: 'nav.home', path: '/' },
-  { id: 'leaderboard', labelKey: 'nav.leaderboard', path: '/leaderboard' },
-  { id: 'stats', labelKey: 'nav.stats', path: '/stats' },
+  { id: 'home', labelKey: 'nav.home', path: '/', icon: House },
+  { id: 'leaderboard', labelKey: 'nav.leaderboard', path: '/leaderboard', icon: LayoutList },
+  { id: 'stats', labelKey: 'nav.stats', path: '/stats', icon: ChartLine },
+
 ])
 
 export function useNavigation() {
