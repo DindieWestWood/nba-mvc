@@ -68,18 +68,18 @@
 }
 
 :root[data-theme='dark'] {
-  --surface-body: #0f172a;
-  --surface-panel: #1e293b;
-  --surface-panel-border: rgba(148, 163, 184, 0.2);
-  --surface-panel-shadow: 0 15px 35px rgba(2, 6, 23, 0.9);
+  --surface-body: var(--stone-color-900);
+  --surface-panel: var(--stone-color-800);
+  --surface-panel-border: var(--stone-color-700);
+  --surface-panel-shadow: 0 15px 35px var(--stone-color-950);
   --color-text-primary: var(--vt-c-text-dark-1);
-  --color-nav-bg: var(--accent-color-950);
+  --color-nav-bg: var(--stone-color-800);
   --color-nav-link: var(--accent-color-50);
-  --color-nav-link-hover-bg: var(--accent-color-900);
+  --color-nav-link-hover-bg: var(--stone-color-700);
   --color-nav-link-active-bg: var(--accent-color-400);
-  --color-nav-link-active-text: #041f0f;
+  --color-nav-link-active-text: var(--accent-color-950);
   --color-nav-link-active-hover-bg: var(--accent-color-300);
-  --color-focus: #0fa74a;
+  --color-focus: #FFFFFF;
 }
 
 *,

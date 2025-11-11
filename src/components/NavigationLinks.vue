@@ -67,14 +67,12 @@ const { items } = useNavigation()
   border-bottom: 2px solid var(--accent-color-500);
   -webkit-box-shadow: inset -2px -2px 6px 4px rgba(0,0,0,0.05), 
                       inset 2px 2px 6px 4px rgba(255,255,255,0.2),
-                      rgba(99, 99, 99, 0.2) 2px 2px 8px 0px;
+                      rgba(0, 0, 0, 0.2) 2px 2px 8px 0px;
   box-shadow: inset -2px -2px 6px 6px rgba(0,0,0,0.05), 
               inset 2px 2px 6px 6px rgba(255,255,255,0.2),
               rgba(99, 99, 99, 0.2) 2px 2px 8px 0px;
-}
 
-.nav-links__link--active:hover {
-  pointer-events: none;
+  cursor: default;
 }
 
 @media screen and (min-width: 1280px) {

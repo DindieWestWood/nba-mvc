@@ -32,8 +32,8 @@ const { t } = useI18n()
   backdrop-filter: blur(8px);
   padding: .5rem;
   border-radius: 999px;
-  -webkit-box-shadow: rgba(99, 99, 99, 0.1) 2px 2px 8px 0px;
-  box-shadow: rgba(99, 99, 99, 0.1) 2px 2px 8px 0px;
+  -webkit-box-shadow: var(--surface-panel-shadow);
+  box-shadow: var(--surface-panel-shadow);
 }
 
 .primary-nav__inner {

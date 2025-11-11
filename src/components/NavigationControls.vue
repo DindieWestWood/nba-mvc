@@ -5,8 +5,8 @@ import ThemeToggle from './ThemeToggle.vue'
 
 <template>
   <div class="nav-controls">
-    <!-- <LanguageSwitcher />
-    <ThemeToggle class="nav-controls__toggle" /> -->
+    <LanguageSwitcher />
+    <ThemeToggle class="nav-controls__toggle" />
   </div>
 </template>
 
