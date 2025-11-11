@@ -1,47 +1,53 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { RouterView } from 'vue-router'
+import NavigationMenu from './components/NavigationMenu.vue'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div class="app-shell">
+    <NavigationMenu />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <main class="content" role="main">
+      <RouterView />
+    </main>
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+.app-shell {
+  min-height: 100vh;
+  background: #f3f4f6;
+  color: #111827;
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.content {
+  padding: 2rem clamp(1rem, 4vw, 4rem);
+  display: grid;
+  gap: 1.5rem;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.panel {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+.panel h1,
+.panel h2 {
+  margin-bottom: 0.5rem;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+.panel p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .content {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
 }
 </style>
