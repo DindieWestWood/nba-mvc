@@ -5,7 +5,9 @@ import NavigationMenu from './components/NavigationMenu.vue'
 
 <template>
   <div class="app-shell">
-    <NavigationMenu />
+    <div class="nav-ctn">
+      <NavigationMenu />
+    </div>
 
     <main class="content" role="main">
       <RouterView />
@@ -15,16 +17,23 @@ import NavigationMenu from './components/NavigationMenu.vue'
 
 <style scoped>
 .app-shell {
-  min-height: 100vh;
+  display: grid;
+  width: 100vw;
+  height: 100vh;
   background: var(--surface-body);
   color: var(--color-text-primary);
   font-family: var(--font-family-base);
 }
 
+.nav-ctn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .content {
+  min-height: 100vh;
   padding: 2rem clamp(1rem, 4vw, 4rem);
-  display: grid;
-  gap: 1.5rem;
 }
 
 :global(.panel) {
@@ -48,6 +57,17 @@ import NavigationMenu from './components/NavigationMenu.vue'
 @media (min-width: 768px) {
   .content {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .app-shell {
+    grid-template-columns: auto 1fr;
+  }
+
+  .nav-ctn {
+    height: 100%;
+    padding: 1rem;
   }
 }
 </style>

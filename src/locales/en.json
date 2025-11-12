@@ -8,7 +8,7 @@
   "sections": {
     "home": {
       "title": "Home",
-      "description": "Welcome to the NBA MVC playground. Choose a section in the navigation to dive into the data."
+      "description": "Using advanced stats to find wich player has the most valuable contract to his team."
     },
     "leaderboard": {
       "title": "Leaderboard",
