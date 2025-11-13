@@ -13,12 +13,37 @@ export async function fetchContractLeaderboard(params = {}) {
     throw new Error('Missing VITE_API_BASE_URL environment variable')
   }
 
+  const normalizeDateParam = (value) => {
+    if (value instanceof Date) {
+      return String(value.getTime())
+    }
+
+    if (typeof value === 'number' && !Number.isNaN(value)) {
+      return String(value)
+    }
+
+    if (typeof value === 'string' && value.trim() !== '') {
+      const asNumber = Number(value)
+      if (!Number.isNaN(asNumber)) {
+        return String(asNumber)
+      }
+
+      const parsed = Date.parse(value)
+      if (!Number.isNaN(parsed)) {
+        return String(parsed)
+      }
+    }
+
+    throw new Error('Invalid date parameter. Provide a timestamp, ISO string, or Date object.')
+  }
+
   const effectiveParams = { minMinutesPerGame: 12, ...params }
   const query = new URLSearchParams()
 
   Object.entries(effectiveParams).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') {
-      query.set(key, String(value))
+      const normalizedValue = key === 'date' ? normalizeDateParam(value) : String(value)
+      query.set(key, normalizedValue)
     }
   })
 
