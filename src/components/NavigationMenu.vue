@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import NavigationControls from './NavigationControls.vue'
 import NavigationLinks from './NavigationLinks.vue'
@@ -10,7 +10,7 @@ const { t } = useI18n()
   <nav class="primary-nav" :aria-label="t('nav.ariaLabel')">
     <div class="primary-nav__inner">
       <NavigationLinks class="primary-nav__links" />
-      <!-- <NavigationControls class="primary-nav__controls" /> -->
+      <NavigationControls class="primary-nav__controls" />
     </div>
   </nav>
 </template>

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import LanguageSwitcher from './LanguageSwitcher.vue'
 import ThemeToggle from './ThemeToggle.vue'
 </script>

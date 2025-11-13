@@ -1,6 +1,16 @@
-<script setup>
+<script setup lang="ts">
+import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
 import NavigationMenu from './components/NavigationMenu.vue'
+import { useLeaderboardStore } from './stores/leaderboardStore'
+
+const leaderboardStore = useLeaderboardStore()
+
+onMounted(() => {
+  leaderboardStore.ensureLeaderboardData().catch((err) => {
+    console.error('Failed to load leaderboard data', err)
+  })
+})
 </script>
 
 <template>

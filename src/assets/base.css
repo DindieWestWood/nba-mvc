@@ -26,29 +26,29 @@
 }
 
 :root {
-  --accent-color-50: #eefff4;
-  --accent-color-100: #d7ffe8;
-  --accent-color-200: #b2ffd2;
-  --accent-color-300: #76ffb0;
-  --accent-color-400: #33f587;
-  --accent-color-500: #09de65;
-  --accent-color-600: #00a849;
-  --accent-color-700: #049142;
-  --accent-color-800: #0a7138;
-  --accent-color-900: #0a5d30;
-  --accent-color-950: #003418;
+  --accent-color-50: #F7FEE7;
+  --accent-color-100: #ECFCCA;
+  --accent-color-200: #D8F999;
+  --accent-color-300: #BBF451;
+  --accent-color-400: #9AE600;
+  --accent-color-500: #7CCE00;
+  --accent-color-600: #5EA500;
+  --accent-color-700: #497D00;
+  --accent-color-800: #3C6300;
+  --accent-color-900: #35530E;
+  --accent-color-950: #192E03;
 
-  --stone-color-50: oklch(98.5% 0.001 106.423);
-  --stone-color-100: oklch(97% 0.001 106.424);
-  --stone-color-200: oklch(92.3% 0.003 48.717);
-  --stone-color-300: oklch(86.9% 0.005 56.366);
-  --stone-color-400: oklch(70.9% 0.01 56.259);
-  --stone-color-500: oklch(55.3% 0.013 58.071);
-  --stone-color-600: oklch(44.4% 0.011 73.639);
-  --stone-color-700: oklch(37.4% 0.01 67.558);
-  --stone-color-800: oklch(26.8% 0.007 34.298);
-  --stone-color-900: oklch(21.6% 0.006 56.043);
-  --stone-color-950: oklch(14.7% 0.004 49.25);
+  --stone-color-50: #FAFAF9;
+  --stone-color-100: #F5F5F4;
+  --stone-color-200: #E7E5E4;
+  --stone-color-300: #D6D3D1;
+  --stone-color-400: #A6A09B;
+  --stone-color-500: #79716B;
+  --stone-color-600: #57534D;
+  --stone-color-700: #44403B;
+  --stone-color-800: #292524;
+  --stone-color-900: #1C1917;
+  --stone-color-950: #0C0A09;
 }
 
 :root {
