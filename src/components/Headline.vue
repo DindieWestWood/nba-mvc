@@ -1,5 +1,12 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import Star from './Star.vue';
+import { useScreen } from '@/composables/useScreen';
+import { transform } from 'zod';
+
+const { width } = useScreen()
+
+const scale = computed(() => width.value / 350);
 </script>
 
 <template>
@@ -9,7 +16,9 @@ import Star from './Star.vue';
     <div class="headline-overlay-container">
       <div class="headline-overlay">
         <p>MVC</p>
-        <div class="headline-stars">
+        <div class="headline-stars" :style="{
+            transform: `translate(-50%, -50%) rotate(20deg) scale(${scale})`,
+          }">
           <Star class="headline-star"/>
           <Star class="headline-star" :pulse-frequency="3" :size="25"/>
           <Star class="headline-star" :pulse-frequency="4" :size="35"/>
@@ -41,8 +50,10 @@ import Star from './Star.vue';
     top: 50%;
     left: 50%;
     transform: translate(-60%, -50%);
-    width: 220px;
-    height: 87px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     user-select: none;
   } 
 
@@ -54,15 +65,19 @@ import Star from './Star.vue';
     font-size: 25vw;
     transform: rotate(-20deg);
     color: var(--headline-overlay-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    
   }
 
   .headline-stars {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transform: rotate(20deg);
+    top: 50%;
+    left: 50%;
+    width: 220px;
+    height: 88px;
   }
 
   .headline-star {
