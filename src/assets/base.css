@@ -1,4 +1,6 @@
 /* base palette pulled from https://github.com/vuejs/theme */
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Mango+Grotesque:wght@400;500;700&family=Martian+Mono:wght@400;500;700&display=swap');
+
 :root {
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
@@ -22,6 +24,8 @@
 
   --section-gap: 160px;
   --font-family-base: 'Martian Mono', system-ui, 'Helvetica Neue', sans-serif;
+  --font-family-display: 'Bungee Shade', cursive;
+  --font-family-accent: 'Mango Grotesque', 'Martian Mono', sans-serif;
   --transition-theme: 0.25s ease;
 }
 
@@ -73,7 +77,8 @@
   inset -3px 0 2px 1px var(--accent-50-25),
   inset 0 -3px 2px 1px var(--accent-950-10),
   inset 3px 0 2px 1px var(--accent-950-10);
-  
+
+  --star-color: var(--accent-500);
 }
 
 :root[data-theme='dark'] {
