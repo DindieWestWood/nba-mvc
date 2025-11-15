@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useAttrs } from 'vue'
+
+interface Props {
+  size?: number
+  pulseFrequency?: number
+  scaleMin?: number
+  scaleMax?: number
+}
 
 const props = withDefaults(
-  defineProps<{
-    size?: number
-    pulseFrequency?: number
-    scaleMin?: number
-    scaleMax?: number
-  }>(),
+  defineProps<Props>(),
   {
     size: 40,
     pulseFrequency: 2,
@@ -15,6 +17,8 @@ const props = withDefaults(
     scaleMax: 1.08,
   },
 )
+
+const attrs = useAttrs()
 
 const starStyle = computed(() => ({
   width: `${props.size}px`,
@@ -27,6 +31,7 @@ const starStyle = computed(() => ({
 
 <template>
   <svg
+    v-bind="attrs"
     class="star"
     viewBox="0 0 40 40"
     xmlns="http://www.w3.org/2000/svg"

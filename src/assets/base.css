@@ -79,6 +79,9 @@
   inset 3px 0 2px 1px var(--accent-950-10);
 
   --star-color: var(--accent-500);
+  --headline-prefix-color: var(--stone-400);
+  --headline-color: var(--stone-200);
+  --headline-overlay-color: var(--stone-800);
 }
 
 :root[data-theme='dark'] {

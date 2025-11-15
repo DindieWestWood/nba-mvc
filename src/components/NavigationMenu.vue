@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, useAttrs } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useNavigation } from '@/composables/useNavigation'
+import { useNavigation } from '../composables/useNavigation'
 import { RouterLink } from 'vue-router'
 
 const attr = useAttrs()

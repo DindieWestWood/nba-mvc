@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import PlayerCard from '../components/PlayerCard.vue'
+import Headline from '@/components/Headline.vue'
 
 const { t } = useI18n()
 
@@ -17,11 +18,10 @@ const featuredPlayer = {
 </script>
 
 <template>
-  <div class="description">
-    <p class="h1-prefix">NBA's</p>
-    <h1>Most Valuable Contract</h1>
+  <section>
+    <Headline/>
     <p>{{ t('sections.home.description') }}</p>
-  </div>
+  </section>
 
   <section class="featured-player">
     <PlayerCard :player="featuredPlayer" />
@@ -43,11 +43,6 @@ const featuredPlayer = {
 <style scoped>
 .description {
   margin-bottom: 72px;
-}
-
-.h1-prefix {
-  margin-bottom: 0.5rem;
-  color: var(--color-nav-link);
 }
 
 .featured-player {
