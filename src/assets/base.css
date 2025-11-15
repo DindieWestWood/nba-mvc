@@ -42,7 +42,7 @@
   --accent-900: #35530E;
   --accent-950: rgb(25, 46, 3); --accent-950-10: rgba(25, 46, 3, 0.1);
 
-  --stone-50: #fafaf9; --stone-50-25: rgba(250, 250, 249, 0.25);
+  --stone-50: #fafaf9; --stone-50-25: rgba(250, 250, 249, 0.25); --stone-50-50: rgba(250, 250, 249, 0.5);
   --stone-100: #F5F5F4;
   --stone-200: #E7E5E4;
   --stone-300: #D6D3D1;
@@ -52,7 +52,7 @@
   --stone-700: #44403B;
   --stone-800: #292524;
   --stone-900: #1C1917;
-  --stone-950: #0c0a09; --stone-950-25: rgba(12, 10, 9, 0.25); --stone-950-40: rgba(12, 10, 9, 0.4);
+  --stone-950: #0c0a09; --stone-950-5: rgba(12, 10, 9, 0.05); --stone-950-25: rgba(12, 10, 9, 0.25); --stone-950-40: rgba(12, 10, 9, 0.4);
 }
 
 :root {
@@ -73,15 +73,29 @@
   --nav-link-color: var(--stone-400);
   --nav-link-color-active: var(--accent-800);
   --nav-handle-bg: linear-gradient(45deg, var(--accent-400) 0%, var(--accent-200) 100%);
-  --nav-handle-shadow: inset 0 3px 2px 1px var(--accent-50-25),
-  inset -3px 0 2px 1px var(--accent-50-25),
-  inset 0 -3px 2px 1px var(--accent-950-10),
-  inset 3px 0 2px 1px var(--accent-950-10);
+  --nav-handle-shadow:
+    inset 0 3px 2px 1px var(--accent-50-25),
+    inset -3px 0 2px 1px var(--accent-50-25),
+    inset 0 -3px 2px 1px var(--accent-950-10),
+    inset 3px 0 2px 1px var(--accent-950-10);
 
   --star-color: var(--accent-500);
   --headline-prefix-color: var(--stone-400);
   --headline-color: var(--stone-200);
   --headline-overlay-color: var(--stone-800);
+
+  --card-bg: linear-gradient(45deg, var(--stone-200) 0%, var(--stone-100) 100%);
+  --card-shadow:
+    inset -3px 0 2px 2px var(--stone-50-50),
+    inset 0 3px 2px 2px var(--stone-50-50),
+    inset 3px 0 2px 2px var(--stone-950-5),
+    inset 0 -3px 2px 2px var(--stone-950-5);
+
+    --card-shadow-hover:
+    inset -3px 0 2px 2px var(--stone-50-50),
+    inset 0 3px 2px 2px var(--stone-50-50),
+    inset 3px 0 2px 2px var(--stone-950-5),
+    inset 0 -3px 2px 2px var(--stone-950-5);
 }
 
 :root[data-theme='dark'] {

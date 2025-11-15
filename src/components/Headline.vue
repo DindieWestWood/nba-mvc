@@ -2,8 +2,6 @@
 import { computed } from 'vue';
 import Star from './Star.vue';
 import { useScreen } from '@/composables/useScreen';
-import { transform } from 'zod';
-
 const { width } = useScreen()
 
 const scale = computed(() => width.value / 350);
