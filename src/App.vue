@@ -15,11 +15,11 @@ onMounted(() => {
 
 <template>
   <div class="app-shell">
-    <div class="nav-ctn">
+    <header role="banner" class="nav-ctn">
       <NavigationMenu />
-    </div>
+    </header>
 
-    <main class="content" role="main">
+    <main role="main" class="content">
       <RouterView />
     </main>
   </div>
@@ -33,6 +33,22 @@ onMounted(() => {
   background: var(--surface-body);
   color: var(--color-text-primary);
   font-family: var(--font-family-base);
+  overflow: hidden;
+}
+
+header {
+  position: fixed;
+  z-index: 100;
+  width: 100%;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+main {
+  overflow: auto;
 }
 
 .nav-ctn {
@@ -75,9 +91,9 @@ onMounted(() => {
     grid-template-columns: auto 1fr;
   }
 
-  .nav-ctn {
+  header {
+    position: relative;
     height: 100%;
-    padding: 1rem;
   }
 }
 </style>
