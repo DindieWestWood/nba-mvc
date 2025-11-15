@@ -1,80 +1,126 @@
 <script setup lang="ts">
+import { computed, useAttrs } from 'vue'
 import { useI18n } from 'vue-i18n'
-import NavigationControls from './NavigationControls.vue'
-import NavigationLinks from './NavigationLinks.vue'
+import { useNavigation } from '@/composables/useNavigation'
+import { RouterLink } from 'vue-router'
 
+const attr = useAttrs()
 const { t } = useI18n()
+const { items } = useNavigation()
+
+const activeIndex = computed(() => {
+  const index = items.value.findIndex((item) => item.isActive)
+  return index >= 0 ? index : 0
+})
+
+const navStyle = computed(() => ({
+  '--selected-index': `${activeIndex.value}`,
+}))
 </script>
 
 <template>
-  <nav class="primary-nav" :aria-label="t('nav.ariaLabel')">
-    <div class="primary-nav__inner">
-      <NavigationLinks class="primary-nav__links" />
-      <NavigationControls class="primary-nav__controls" />
-    </div>
+  <nav v-bind="attr" :style="navStyle">
+    <span></span>
+    <ul>
+      <li v-for="item in items">
+        <RouterLink
+        class="nav-links__link"
+        :class="{ 'nav-links__link--active': item.isActive }"
+        :to="item.path"
+        :aria-label="t(item.labelKey)"
+        :aria-current="item.isActive ? true : undefined"
+      >
+        <component :is="item.icon"></component>
+      </RouterLink>
+      </li>  
+    </ul>
   </nav>
 </template>
 
-<style scoped>
-.primary-nav {
-  border-top: 1px solid var(--surface-panel-border);
-  border-left: 1px solid var(--surface-panel-border);
-  border-right: 1px solid var(--surface-panel-border);
-  border-bottom: 3px solid var(--surface-panel-border);
-  background: var(--color-nav-bg);
-  position: fixed;
-  bottom: 1rem;
-  left: 50%;
-  width: calc(100% - 2rem);
-  max-width: 400px;
-  transform: translateX(-50%);
-  z-index: 10;
-  backdrop-filter: blur(8px);
-  padding: .5rem;
-  border-radius: 999px;
-  -webkit-box-shadow: var(--surface-panel-shadow);
-  box-shadow: var(--surface-panel-shadow);
-}
-
-.primary-nav__inner {
+<style scoped lang="scss">
+nav {
+  --nav-padding: 0.375rem;
+  --links-count: 3;
+  --selected-index: 0; 
+  --handle-size: calc(calc(100% - calc(var(--nav-padding) * 2)) / var(--links-count)); 
+  
+  position: relative;
+  z-index: 100;
+  
   display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.primary-nav__links {
-  flex-basis: 0;
-  flex: 1;
-}
-
-.primary-nav__controls {
-  flex-shrink: 0;
-}
-
-@media (max-width: 600px) {
-  .primary-nav__inner {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .primary-nav__links {
+  width: calc(calc(2 * var(--nav-padding)) + calc(var(--links-count) * 4.5rem));
+  height: calc(3rem + calc(var(--nav-padding) * 2));
+  padding: var(--nav-padding);  
+  
+  border-radius: 999px;
+  background: var(--nav-bg);
+  box-shadow: var(--nav-shadow);
+  
+  ul {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    list-style: none;
+    display: flex;
+    height: 100%;
     width: 100%;
   }
-
-  .primary-nav__controls {
+  
+  li {
+    z-index: 1;
+    flex-basis: 0;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
+    height: 100%;
+    color: var(--nav-link-color);
+    transition: color 0.3s ease-in-out,
+                scale 0.3s ease-in-out;
+    
+    &[aria-current="true"] {
+      color: var(--nav-link-color-active);
+      transform: scale(1.05);
+    }
+  }
+  
+  span {
+    --offset: calc(var(--handle-size) * var(--selected-index)); 
+    z-index: 0;
+    position: absolute;
+    left: calc(var(--nav-padding) + var(--offset));
+    height: calc(100% - calc(var(--nav-padding) * 2));
+    width: var(--handle-size);
+    top: var(--nav-padding);
+    background: var(--nav-handle-bg);
+    box-shadow: var(--nav-handle-shadow);
+    border-radius: 999px;
+    transition: top 200ms ease-in-out,
+                left 200ms ease-in-out;
   }
 }
 
 @media screen and (min-width: 1280px) {
-  .primary-nav { 
-    width: fit-content;
-    position: relative;
-    transform: unset;
-    top: unset;
-    left: unset;
+  nav {
+    height: calc(calc(2 * var(--nav-padding)) + calc(var(--links-count) * 4.5rem));
+    width: calc(3rem + calc(var(--nav-padding) * 2));
+
+    ul {
+      flex-direction: column;
+    }
+
+    span {
+      left: var(--nav-padding);
+      height: var(--handle-size);
+      width: calc(100% - calc(var(--nav-padding) * 2));
+      top: calc(var(--nav-padding) + var(--offset));
+    }
   }
 }
 </style>

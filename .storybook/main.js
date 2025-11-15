@@ -1,4 +1,7 @@
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 /** @type { import('@storybook/vue3-vite').StorybookConfig } */
 const config = {
@@ -16,6 +19,18 @@ const config = {
   "framework": {
     "name": "@storybook/vue3-vite",
     "options": {}
+  },
+  async viteFinal(existingConfig) {
+    return {
+      ...existingConfig,
+      resolve: {
+        ...(existingConfig.resolve ?? {}),
+        alias: {
+          ...(existingConfig.resolve?.alias ?? {}),
+          '@': resolve(__dirname, '../src'),
+        },
+      },
+    };
   }
 };
 export default config;
