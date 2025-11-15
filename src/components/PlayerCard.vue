@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import Card from './Card.vue'
+import Tag from './Tag.vue'
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -59,115 +61,101 @@ const numberAndMeta = computed(() => {
 </script>
 
 <template>
-  <article class="player-card" :aria-label="player.name">
-    <div class="player-card__halo" aria-hidden="true">
-      {{ player.number ?? '' }}
-    </div>
+  <Card :clickable="true">
+    <article class="player" :aria-label="player.name">
+      <p class="player-rank">
+        #{{ player.rank ?? '' }}
+      </p>
 
-    <dl class="player-card__stats" aria-label="Player metrics">
-      <div class="player-card__stat">
-        <dt>Salary</dt>
-        <dd>{{ formattedSalary }}</dd>
+      <dl class="player-stats" aria-label="Player metrics">
+        <div class="player-stat">
+          <dt>Salary</dt>
+          <dd><Tag>{{ formattedSalary }}</Tag></dd>
+        </div>
+        <div class="player-stat">
+          <dt>Score</dt>
+          <dd><Tag>{{ formattedScore }}</Tag></dd>
+        </div>
+      </dl>
+      
+      <figure class="player-headshot">
+        <img
+          :src="headshotUrl"
+          alt=""
+          loading="lazy"
+        />
+      </figure>
+
+      <div class="player-details">
+        <h3>{{ player.name }}</h3>
+        <p>{{ numberAndMeta }}</p>
       </div>
-      <div class="player-card__stat">
-        <dt>Gen. Score</dt>
-        <dd>{{ formattedScore }}</dd>
-      </div>
-    </dl>
-
-    <figure class="player-card__figure">
-      <img
-        :src="headshotUrl"
-        :alt="`${player.name} headshot`"
-        loading="lazy"
-      />
-    </figure>
-
-    <div class="player-card__details">
-      <h3>{{ player.name }}</h3>
-      <p>{{ numberAndMeta }}</p>
-    </div>
-  </article>
+    </article>
+  </Card>
+  
 </template>
 
 <style scoped>
-.player-card {
-  position: relative;
-  width: min(360px, 100%);
-  border-radius: 32px;
-  padding: 1.25rem 1.5rem 0;
-  background: radial-gradient(120% 120% at 0% 0%, #172360 0%, #04031a 65%);
-  color: #dbeafe;
-  overflow: hidden;
-  box-shadow: 0 18px 45px rgba(2, 6, 23, 0.65);
+.player {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: repeat(4, auto);
+  align-items: center;
+  justify-content: center;
+}
+
+.player-rank {
+  grid-area: 1 / 1 / 3 / 2;
+  font-family: 'Bungee Shade';
+  font-size: 60px;
+  line-height: 100%;
+  margin-bottom: 1rem;
+}
+
+.player-stats {
+  grid-area: 3 / 1 / 4 / 2;
   display: flex;
   flex-direction: column;
-  min-height: 320px;
+  gap: 0.5rem;
+  padding-bottom: 1rem;
+
+  dt {
+    color: var(--secondary);
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+  }
 }
 
-.player-card__halo {
-  position: absolute;
-  inset: 1rem auto auto 1.25rem;
-  font-size: 5rem;
-  font-weight: 800;
-  line-height: 1;
-  opacity: 0.05;
-  color: #c7d2fe;
-  pointer-events: none;
-}
-
-.player-card__stats {
+.player-headshot {
+  grid-area: 2 / 2 / 4 / 3;
+  overflow: hidden;
+  border: 1px solid red;
   display: flex;
-  justify-content: flex-end;
-  gap: 2rem;
+
+
+  img {
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+  }
+}
+
+.player-details {
+  grid-area: 4 / 1 / 5 / -1;
+  padding: 1rem .5rem 0.5rem;
+  border-top: 1px solid var(--separator-color);
+}
+
+.player-details h3 {
+  font-size: 1rem;
+  font-weight: bold;
   margin: 0;
 }
 
-.player-card__stat {
-  text-align: right;
-  color: rgba(226, 232, 240, 0.8);
-}
-
-.player-card__stat dt {
-  font-size: 0.8rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  margin-bottom: 0.15rem;
-}
-
-.player-card__stat dd {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #fdf4ff;
-  margin: 0;
-}
-
-.player-card__figure {
-  margin: 0 auto;
-  margin-top: auto;
-  width: 240px;
-}
-
-.player-card__figure img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: contain;
-  filter: drop-shadow(0 10px 20px rgba(2, 6, 23, 0.45));
-}
-
-.player-card__details {
-  padding: 1.25rem 0 1.5rem;
-}
-
-.player-card__details h3 {
-  font-size: 1.5rem;
-  margin: 0;
-  color: #f8fafc;
-}
-
-.player-card__details p {
-  margin-top: 0.25rem;
-  color: rgba(226, 232, 240, 0.7);
+.player-details p {
+  font-size: 0.75rem;
+  color: var(--secondary);
 }
 </style>

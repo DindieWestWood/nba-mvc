@@ -91,11 +91,14 @@
     inset 3px 0 2px 2px var(--stone-950-5),
     inset 0 -3px 2px 2px var(--stone-950-5);
 
-    --card-shadow-hover:
+  --card-shadow-hover:
     inset -3px 0 2px 2px var(--stone-50-50),
     inset 0 3px 2px 2px var(--stone-50-50),
     inset 3px 0 2px 2px var(--stone-950-5),
     inset 0 -3px 2px 2px var(--stone-950-5);
+
+  --separator-color: var(--stone-300);
+
 }
 
 :root[data-theme='dark'] {

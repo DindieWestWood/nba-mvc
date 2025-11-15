@@ -2,7 +2,7 @@
 import { useAttrs } from 'vue';
 
 interface Props {
-  clickable: boolean;
+  clickable?: boolean;
 }
 
 const attrs = useAttrs()

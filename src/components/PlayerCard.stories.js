@@ -18,6 +18,7 @@ const meta = {
     player: {
       id: '1628973',
       name: 'Jalen Brunson',
+      rank: 42,
       number: 11,
       positions: ['PG', 'SG'],
       team: 'New York Knicks',
