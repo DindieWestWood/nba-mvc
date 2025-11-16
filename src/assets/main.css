@@ -25,15 +25,12 @@ h1 {
 
 h2 {
   font-family: 'Mango Grotesque';
-  font-weight: 600px;
+  font-weight: bold;
   font-size: 74px;
   line-height: 64px;
+  margin-bottom: 0.5rem;
 }
 
 section {
   padding: 2rem 0;
-}
-
-section h2 {
-  text-align: center;
 }

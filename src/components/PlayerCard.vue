@@ -1,20 +1,28 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useAttrs } from 'vue'
 import Card from './Card.vue'
 import Tag from './Tag.vue'
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
-  maximumFractionDigits: 0
-})
+  notation: "compact",
+  compactDisplay: "short",
+  maximumFractionDigits: 2
+});
 
 const props = defineProps({
   player: {
     type: Object,
     required: true
-  }
+  },
+  collapsed: {
+    type: Boolean,
+    required: false
+  },
 })
+
+const attrs = useAttrs()
 
 const formattedSalary = computed(() => {
   const value = props.player.salary
@@ -61,8 +69,8 @@ const numberAndMeta = computed(() => {
 </script>
 
 <template>
-  <Card :clickable="true">
-    <article class="player" :aria-label="player.name">
+  <Card v-bind="attrs" :clickable="true">
+    <article class="player" :class="{ collapsed: props.collapsed }" :aria-label="player.name">
       <p class="player-rank">
         #{{ player.rank ?? '' }}
       </p>
@@ -70,15 +78,15 @@ const numberAndMeta = computed(() => {
       <dl class="player-stats" aria-label="Player metrics">
         <div class="player-stat">
           <dt>Salary</dt>
-          <dd><Tag>{{ formattedSalary }}</Tag></dd>
+          <dd><Tag :size="props.collapsed ? 'small' : 'regular'">{{ formattedSalary }}</Tag></dd>
         </div>
         <div class="player-stat">
           <dt>Score</dt>
-          <dd><Tag>{{ formattedScore }}</Tag></dd>
+          <dd><Tag :size="props.collapsed ? 'small' : 'regular'">{{ formattedScore }}</Tag></dd>
         </div>
       </dl>
       
-      <figure class="player-headshot">
+      <figure class="player-headshot" v-if="!collapsed">
         <img
           :src="headshotUrl"
           alt=""
@@ -95,7 +103,7 @@ const numberAndMeta = computed(() => {
   
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .player {
   width: 100%;
 
@@ -129,16 +137,19 @@ const numberAndMeta = computed(() => {
 }
 
 .player-headshot {
-  grid-area: 2 / 2 / 4 / 3;
-  overflow: hidden;
-  border: 1px solid red;
-  display: flex;
-
+  grid-area: 2 / 1 / 4 / 3;
+  position: relative;
+  width: 100%;
+  height: 100%;
 
   img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
-    width: auto;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: right center;
   }
 }
 
@@ -158,4 +169,15 @@ const numberAndMeta = computed(() => {
   font-size: 0.75rem;
   color: var(--secondary);
 }
+
+.collapsed {
+  .player-stats {
+    padding-left: 0.5rem;
+    grid-area: 1 / 2 / 3 / 3;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: end;
+  }
+}
+
 </style>

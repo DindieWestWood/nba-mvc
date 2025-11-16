@@ -8,6 +8,7 @@ const { t } = useI18n()
 const featuredPlayer = {
   id: '1628973',
   name: 'Jalen Brunson',
+  rank: 42,
   number: 11,
   positions: ['PG', 'SG'],
   team: 'New York Knicks',
@@ -23,20 +24,10 @@ const featuredPlayer = {
     <p>{{ t('sections.home.description') }}</p>
   </section>
 
-  <section class="featured-player">
-    <PlayerCard :player="featuredPlayer" />
-
-    <div class="featured-player__copy">
-      <p>{{ t('sections.leaderboard.description') }}</p>
-      <p class="featured-player__hint">
-        {{ t('sections.home.description') }}
-      </p>
-    </div>
-  </section>
-
   <section>
     <h2>{{ t('sections.leaderboard.title') }}</h2>
-
+    <PlayerCard class="leaderboard-player" :player="featuredPlayer" />
+    <PlayerCard class="leaderboard-player" :player="featuredPlayer" collapsed/>
   </section>
 </template>
 
@@ -53,6 +44,10 @@ const featuredPlayer = {
   margin-bottom: 72px;
 }
 
+.leaderboard-player {
+  width: 100%;
+}
+
 .featured-player__copy {
   flex: 1;
   min-width: 240px;
@@ -62,6 +57,10 @@ const featuredPlayer = {
   margin-top: 1rem;
   color: var(--color-nav-link);
   opacity: 0.7;
+}
+
+section:last-child {
+  padding-bottom: 4rem;
 }
 
 @media (max-width: 640px) {
