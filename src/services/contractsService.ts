@@ -1,6 +1,8 @@
 import { z } from 'zod'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+const USE_DEV_PROXY =
+  import.meta.env.DEV && typeof API_BASE_URL === 'string' && API_BASE_URL.includes('localhost')
 
 const ContractLeaderboardMetaSchema = z
   .object({
@@ -47,30 +49,6 @@ export type ContractLeaderboardPlayer = ContractLeaderboard['data'][number]
 type LeaderboardQueryPrimitive = string | number | Date | null | undefined
 export type LeaderboardQueryParams = Record<string, LeaderboardQueryPrimitive>
 
-const normalizeDateParam = (value: string | number | Date): string => {
-  if (value instanceof Date) {
-    return String(value.getTime())
-  }
-
-  if (typeof value === 'number' && !Number.isNaN(value)) {
-    return String(value)
-  }
-
-  if (typeof value === 'string' && value.trim() !== '') {
-    const asNumber = Number(value)
-    if (!Number.isNaN(asNumber)) {
-      return String(asNumber)
-    }
-
-    const parsed = Date.parse(value)
-    if (!Number.isNaN(parsed)) {
-      return String(parsed)
-    }
-  }
-
-  throw new Error('Invalid date parameter. Provide a timestamp, ISO string, or Date object.')
-}
-
 /**
  * Fetches the contract leaderboard with optional query parameters.
  * Ensures minMinutesPerGame defaults to 12 to match API requirements.
@@ -86,16 +64,25 @@ export async function fetchContractLeaderboard(
   const query = new URLSearchParams()
 
   Object.entries(effectiveParams).forEach(([key, value]) => {
+    if (key === 'date') {
+      return
+    }
+
     if (value !== undefined && value !== null && value !== '') {
-      const normalizedValue = key === 'date' ? normalizeDateParam(value) : String(value)
-      query.set(key, normalizedValue)
+      query.set(key, String(value))
     }
   })
 
-  const url = new URL('/leaderboard/contracts', API_BASE_URL)
-  url.search = query.toString()
+  const search = query.toString()
+  const requestUrl = USE_DEV_PROXY
+    ? `/api/leaderboard/contracts${search ? `?${search}` : ''}`
+    : (() => {
+        const url = new URL('/leaderboard/contracts', API_BASE_URL)
+        url.search = search
+        return url.toString()
+      })()
 
-  const response = await fetch(url.toString())
+  const response = await fetch(requestUrl)
   if (!response.ok) {
     throw new Error(`Failed to fetch leaderboard (${response.status})`)
   }
