@@ -70,23 +70,23 @@ const numberAndMeta = computed(() => {
 
 <template>
   <Card v-bind="attrs" :clickable="true">
-    <article class="player" :class="{ collapsed: props.collapsed }" :aria-label="player.name">
-      <p class="player-rank">
+    <article class="player-card" :class="{ collapsed: props.collapsed }" :aria-label="player.name">
+      <p class="player-card__rank">
         #{{ player.rank ?? '' }}
       </p>
 
-      <dl class="player-stats" aria-label="Player metrics">
-        <div class="player-stat">
+      <dl class="player-card__stats" aria-label="Player metrics">
+        <div class="player-card__stat">
           <dt>Salary</dt>
           <dd><Tag :size="props.collapsed ? 'small' : 'regular'">{{ formattedSalary }}</Tag></dd>
         </div>
-        <div class="player-stat">
+        <div class="player-card__stat">
           <dt>Score</dt>
           <dd><Tag :size="props.collapsed ? 'small' : 'regular'">{{ formattedScore }}</Tag></dd>
         </div>
       </dl>
       
-      <figure class="player-headshot" v-if="!collapsed">
+      <figure class="player-card__headshot" v-if="!collapsed">
         <img
           :src="headshotUrl"
           alt=""
@@ -94,7 +94,7 @@ const numberAndMeta = computed(() => {
         />
       </figure>
 
-      <div class="player-details">
+      <div class="player-card__details">
         <h3>{{ player.name }}</h3>
         <p>{{ numberAndMeta }}</p>
       </div>
@@ -104,7 +104,7 @@ const numberAndMeta = computed(() => {
 </template>
 
 <style scoped lang="scss">
-.player {
+.player-card {
   width: 100%;
 
   display: grid;
@@ -114,7 +114,7 @@ const numberAndMeta = computed(() => {
   justify-content: center;
 }
 
-.player-rank {
+.player-card__rank {
   grid-area: 1 / 1 / 3 / 2;
   font-family: 'Bungee Shade';
   font-size: 60px;
@@ -122,7 +122,7 @@ const numberAndMeta = computed(() => {
   margin-bottom: 1rem;
 }
 
-.player-stats {
+.player-card__stats {
   grid-area: 3 / 1 / 4 / 2;
   display: flex;
   flex-direction: column;
@@ -136,7 +136,7 @@ const numberAndMeta = computed(() => {
   }
 }
 
-.player-headshot {
+.player-card__headshot {
   grid-area: 2 / 1 / 4 / 3;
   position: relative;
   width: 100%;
@@ -153,25 +153,25 @@ const numberAndMeta = computed(() => {
   }
 }
 
-.player-details {
+.player-card__details {
   grid-area: 4 / 1 / 5 / -1;
   padding: 1rem .5rem 0.5rem;
   border-top: 1px solid var(--separator-color);
 }
 
-.player-details h3 {
+.player-card__details h3 {
   font-size: 1rem;
   font-weight: bold;
   margin: 0;
 }
 
-.player-details p {
+.player-card__details p {
   font-size: 0.75rem;
   color: var(--secondary);
 }
 
 .collapsed {
-  .player-stats {
+  .player-card__stats {
     padding-left: 0.5rem;
     grid-area: 1 / 2 / 3 / 3;
     flex-direction: row;

@@ -1,72 +1,122 @@
 <script setup lang="ts">
+import { computed, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import PlayerCard from '../components/PlayerCard.vue'
 import Headline from '@/components/Headline.vue'
+import { useLeaderboardStore } from '@/stores/leaderboardStore'
+import type { PlayerContract } from '@/services/contractsService'
 
 const { t } = useI18n()
+const leaderboardStore = useLeaderboardStore()
+const { leaderboardData, isLoading, error } = storeToRefs(leaderboardStore)
 
-const featuredPlayer = {
-  id: '1628973',
-  name: 'Jalen Brunson',
-  rank: 42,
-  number: 11,
-  positions: ['PG', 'SG'],
-  team: 'New York Knicks',
-  salary: 24960000,
-  generalScore: 11.25,
-  headshot: 'https://cdn.nba.com/headshots/nba/latest/1040x760/1628973.png'
+const getSalaryValue = (player: PlayerContract): number => {
+  const { salary } = player.contract
+  return (
+    salary.y1 ??
+    salary.y2 ??
+    salary.y3 ??
+    salary.y4 ??
+    salary.y5 ??
+    salary.y6 ??
+    0
+  )
 }
+
+const teamLookup = computed(() => {
+  const map = new Map<number, string>()
+  leaderboardData.value?.teams?.forEach((team) => {
+    map.set(team.id, team.name)
+  })
+  return map
+})
+
+const topPlayers = computed(() => {
+  if (!leaderboardData.value?.players?.length) {
+    return []
+  }
+
+  const teams = teamLookup.value
+
+  return leaderboardData.value.players.slice(0, 10).map((player, index) => ({
+    id: String(player.id),
+    name: player.name,
+    rank: index + 1,
+    number: undefined,
+    positions: undefined,
+    team: teams.get(player.team_id) ?? '',
+    salary: getSalaryValue(player),
+    generalScore: player.contract.score,
+  }))
+})
+
+const primaryPlayers = computed(() => topPlayers.value.slice(0, 5))
+const condensedPlayers = computed(() => topPlayers.value.slice(5, 10))
+
+onMounted(() => {
+  leaderboardStore.ensureLeaderboardData().catch((err) => {
+    console.error('Failed to load leaderboard', err)
+  })
+})
 </script>
 
 <template>
   <section>
-    <Headline/>
+    <Headline />
     <p>{{ t('sections.home.description') }}</p>
   </section>
 
-  <section>
+  <section class="leaderboard">
     <h2>{{ t('sections.leaderboard.title') }}</h2>
-    <PlayerCard class="leaderboard-player" :player="featuredPlayer" />
-    <PlayerCard class="leaderboard-player" :player="featuredPlayer" collapsed/>
+
+    <p v-if="isLoading" class="leaderboard-status">Loading leaderboard…</p>
+    <p v-else-if="error" class="leaderboard-status">Unable to load leaderboard.</p>
+    <template v-else>
+      <div class="leaderboard-grid">
+        <PlayerCard
+          v-for="player in primaryPlayers"
+          :key="player.id ?? player.rank"
+          class="leaderboard-player"
+          :player="player"
+        />
+      </div>
+
+      <div class="leaderboard-grid condensed">
+        <PlayerCard
+          v-for="player in condensedPlayers"
+          :key="player.id ?? player.rank"
+          class="leaderboard-player"
+          :player="player"
+          collapsed
+        />
+      </div>
+    </template>
   </section>
 </template>
 
 <style scoped>
-.description {
-  margin-bottom: 72px;
+.leaderboard {
+  padding-bottom: 4rem;
 }
 
-.featured-player {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-  margin-bottom: 72px;
+.leaderboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.leaderboard-grid.condensed {
+  margin-top: 1.5rem;
+}
+
+.leaderboard-status {
+  margin-top: 1rem;
+  color: var(--secondary);
 }
 
 .leaderboard-player {
   width: 100%;
-}
-
-.featured-player__copy {
-  flex: 1;
-  min-width: 240px;
-}
-
-.featured-player__hint {
-  margin-top: 1rem;
-  color: var(--color-nav-link);
-  opacity: 0.7;
-}
-
-section:last-child {
-  padding-bottom: 4rem;
-}
-
-@media (max-width: 640px) {
-  .featured-player {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
 </style>

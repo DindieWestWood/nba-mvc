@@ -95,7 +95,9 @@
     inset -3px 0 2px 2px var(--stone-50-50),
     inset 0 3px 2px 2px var(--stone-50-50),
     inset 3px 0 2px 2px var(--stone-950-5),
-    inset 0 -3px 2px 2px var(--stone-950-5);
+    inset 0 -3px 2px 2px var(--stone-950-5),
+    -1px 1px 2px 1px var(--stone-950-25),
+    -2px 2px 8px 2px var(--stone-950-25);
 
   --separator-color: var(--stone-300);
 

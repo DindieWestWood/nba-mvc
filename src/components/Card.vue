@@ -29,6 +29,8 @@ const props = withDefaults(defineProps<Props>(), {
     border-radius: 0.75rem; 
     background: var(--card-bg);
     box-shadow: var(--card-shadow);
+
+    transition: box-shadow 200ms ease-out;
   }
 
   .clickable {

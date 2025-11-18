@@ -1,10 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import {
-  ContractLeaderboardSchema,
-  fetchContractLeaderboard,
-  type ContractLeaderboard,
-} from '../services/contractsService'
+import { ContractDataSchema, fetchContractData, type ContractData } from '../services/contractsService'
 
 const STORAGE_KEY = 'nba_contract_leaderboard'
 const isBrowser = typeof window !== 'undefined'
@@ -41,11 +37,11 @@ const isSameDay = (date: unknown): boolean => {
 }
 
 export const useLeaderboardStore = defineStore('leaderboard', () => {
-  const leaderboardData = ref<ContractLeaderboard | null>(null)
+  const leaderboardData = ref<ContractData | null>(null)
   const isLoading = ref(false)
   const error = ref<Error | null>(null)
 
-  const readCache = (): ContractLeaderboard | null => {
+  const readCache = (): ContractData | null => {
     if (!isBrowser) return null
 
     try {
@@ -53,7 +49,7 @@ export const useLeaderboardStore = defineStore('leaderboard', () => {
       if (!raw) return null
 
       const parsed = JSON.parse(raw)
-      const result = ContractLeaderboardSchema.safeParse(parsed)
+      const result = ContractDataSchema.safeParse(parsed)
       if (result.success && result.data.meta?.date && isSameDay(result.data.meta.date)) {
         leaderboardData.value = result.data
         return result.data
@@ -65,7 +61,7 @@ export const useLeaderboardStore = defineStore('leaderboard', () => {
     return null
   }
 
-  const writeCache = (payload: ContractLeaderboard): void => {
+  const writeCache = (payload: ContractData): void => {
     if (!isBrowser) return
 
     try {
@@ -75,12 +71,12 @@ export const useLeaderboardStore = defineStore('leaderboard', () => {
     }
   }
 
-  const fetchRemote = async (): Promise<ContractLeaderboard> => {
+  const fetchRemote = async (): Promise<ContractData> => {
     isLoading.value = true
     error.value = null
 
     try {
-      const payload = await fetchContractLeaderboard({ date: Date.now() })
+      const payload = await fetchContractData()
       leaderboardData.value = payload
       writeCache(payload)
       return payload
@@ -92,7 +88,7 @@ export const useLeaderboardStore = defineStore('leaderboard', () => {
     }
   }
 
-  const ensureLeaderboardData = async (): Promise<ContractLeaderboard> => {
+  const ensureLeaderboardData = async (): Promise<ContractData> => {
     const cached = readCache()
     if (cached) return cached
     return fetchRemote()
