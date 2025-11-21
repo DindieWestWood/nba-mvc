@@ -69,7 +69,7 @@ const numberAndMeta = computed(() => {
 </script>
 
 <template>
-  <Card v-bind="attrs" :clickable="true">
+  <Card v-bind="attrs" clickable>
     <article class="player-card" :class="{ collapsed: props.collapsed }" :aria-label="player.name">
       <p class="player-card__rank">
         #{{ player.rank ?? '' }}
