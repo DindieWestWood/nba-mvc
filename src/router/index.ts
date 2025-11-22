@@ -3,6 +3,7 @@ import { createRouter, createWebHistory, type RouterHistory, type RouteRecordRaw
 const HomeView = () => import('../views/HomeView.vue')
 const LeaderboardView = () => import('../views/LeaderboardView.vue')
 const StatsView = () => import('../views/StatsView.vue')
+const PlayerView = () => import('../views/PlayerView.vue')
 
 export const routes: RouteRecordRaw[] = [
   { path: '/', name: 'home', component: HomeView, meta: { title: 'Home' } },
@@ -13,6 +14,12 @@ export const routes: RouteRecordRaw[] = [
     meta: { title: 'Leaderboard' },
   },
   { path: '/stats', name: 'stats', component: StatsView, meta: { title: 'Stats' } },
+  {
+    path: '/players/:id',
+    name: 'player',
+    component: PlayerView,
+    meta: { title: 'Player' },
+  },
 ]
 
 export function createAppRouter(history: RouterHistory = createWebHistory(import.meta.env.BASE_URL)) {

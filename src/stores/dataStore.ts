@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { ContractDataSchema, fetchContractData, type ContractData } from '../services/contractsService'
 
-const STORAGE_KEY = 'nba_contract_leaderboard'
+const STORAGE_KEY = 'nba_contract_data'
 const isBrowser = typeof window !== 'undefined'
 
 const toDate = (value: Date | number | string | null | undefined): Date | null => {
@@ -36,10 +36,13 @@ const isSameDay = (date: unknown): boolean => {
   )
 }
 
-export const useLeaderboardStore = defineStore('leaderboard', () => {
+export const useDataStore = defineStore('data', () => {
   const leaderboardData = ref<ContractData | null>(null)
   const isLoading = ref(false)
   const error = ref<Error | null>(null)
+  const playersCount = computed(
+    () => leaderboardData.value?.meta?.counts?.players ?? leaderboardData.value?.players?.length ?? 0,
+  )
 
   const readCache = (): ContractData | null => {
     if (!isBrowser) return null
@@ -88,7 +91,7 @@ export const useLeaderboardStore = defineStore('leaderboard', () => {
     }
   }
 
-  const ensureLeaderboardData = async (): Promise<ContractData> => {
+  const ensureData = async (): Promise<ContractData> => {
     const cached = readCache()
     if (cached) return cached
     return fetchRemote()
@@ -98,6 +101,7 @@ export const useLeaderboardStore = defineStore('leaderboard', () => {
     leaderboardData,
     isLoading,
     error,
-    ensureLeaderboardData,
+    ensureData,
+    playersCount,
   }
 })

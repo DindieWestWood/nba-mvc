@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, useAttrs } from 'vue'
-import Card from './Card.vue'
+import LinkCard from './LinkCard.vue'
 import Tag from './Tag.vue'
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -69,7 +69,7 @@ const numberAndMeta = computed(() => {
 </script>
 
 <template>
-  <Card v-bind="attrs" clickable>
+  <LinkCard v-bind="attrs">
     <article class="player-card" :class="{ collapsed: props.collapsed }" :aria-label="player.name">
       <p class="player-card__rank">
         #{{ player.rank ?? '' }}
@@ -78,11 +78,11 @@ const numberAndMeta = computed(() => {
       <dl class="player-card__stats" aria-label="Player metrics">
         <div class="player-card__stat">
           <dt>Salary</dt>
-          <dd><Tag :size="props.collapsed ? 'small' : 'regular'">{{ formattedSalary }}</Tag></dd>
+          <dd><Tag size="small">{{ formattedSalary }}</Tag></dd>
         </div>
         <div class="player-card__stat">
           <dt>Score</dt>
-          <dd><Tag :size="props.collapsed ? 'small' : 'regular'">{{ formattedScore }}</Tag></dd>
+          <dd><Tag size="small">{{ formattedScore }}</Tag></dd>
         </div>
       </dl>
       
@@ -95,11 +95,11 @@ const numberAndMeta = computed(() => {
       </figure>
 
       <div class="player-card__details">
-        <h3>{{ player.name }}</h3>
-        <p>{{ numberAndMeta }}</p>
+        <p class="player-card__name">{{ player.name }}</p>
+        <p class="player-card__meta">{{ numberAndMeta }}</p>
       </div>
     </article>
-  </Card>
+  </LinkCard>
   
 </template>
 
@@ -159,13 +159,13 @@ const numberAndMeta = computed(() => {
   border-top: 1px solid var(--separator-color);
 }
 
-.player-card__details h3 {
-  font-size: 1rem;
+.player-card__name {
+  font-size: 1.125rem;
   font-weight: bold;
   margin: 0;
 }
 
-.player-card__details p {
+.player-card__meta {
   font-size: 0.75rem;
   color: var(--secondary);
 }

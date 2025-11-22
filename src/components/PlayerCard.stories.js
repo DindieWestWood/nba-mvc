@@ -2,7 +2,7 @@ import PlayerCard from './PlayerCard.vue'
 
 /** @type { import('@storybook/vue3-vite').Meta<typeof PlayerCard> } */
 const meta = {
-  title: 'Components/PlayerCard',
+  title: 'Components/Cards/Player',
   component: PlayerCard,
   parameters: {
     layout: 'centered',

@@ -2,12 +2,12 @@
 import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
 import NavigationMenu from './components/NavigationMenu.vue'
-import { useLeaderboardStore } from './stores/leaderboardStore'
+import { useDataStore } from './stores/dataStore'
 
-const leaderboardStore = useLeaderboardStore()
+const dataStore = useDataStore()
 
 onMounted(() => {
-  leaderboardStore.ensureLeaderboardData().catch((err) => {
+  dataStore.ensureData().catch((err) => {
     console.error('Failed to load leaderboard data', err)
   })
 })

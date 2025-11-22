@@ -4,16 +4,46 @@ import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import PlayerCard from '../components/PlayerCard.vue'
 import Headline from '@/components/Headline.vue'
-import { useLeaderboardStore } from '@/stores/leaderboardStore'
+import { useDataStore } from '@/stores/dataStore'
 import type { PlayerContract } from '@/services/contractsService'
 import Tag from '@/components/Tag.vue'
 import PlayerListCard from '@/components/PlayerListCard.vue'
 import { useNumberTransform } from '@/transforms/number.transform'
+import MoreCard from '@/components/MoreCard.vue'
+
+interface LeaderboardCardPlayer {
+  id: string
+  name: string
+  rank: number
+  number?: number
+  positions?: string[] | string
+  team: string
+  salary: number
+  generalScore: number
+  link: string
+  headshot?: string
+}
+
+interface StatsCategoryEntry {
+  id: string
+  name: string
+  value: number
+  link: string
+  headshot?: string
+}
+
+interface StatsCategory {
+  key: string
+  labelKey: string
+  headline: string
+  players: StatsCategoryEntry[]
+  highlightLeader?: boolean
+}
 
 const { t } = useI18n()
-const leaderboardStore = useLeaderboardStore()
+const dataStore = useDataStore()
 const { numberToShortUSD } = useNumberTransform()
-const { leaderboardData, isLoading, error } = storeToRefs(leaderboardStore)
+const { leaderboardData, isLoading, error, playersCount } = storeToRefs(dataStore)
 
 const getSalaryValue = (player: PlayerContract): number => {
   const { salary } = player.contract
@@ -28,6 +58,8 @@ const getSalaryValue = (player: PlayerContract): number => {
   )
 }
 
+const playerLink = (id: string | number) => `/players/${id}`
+
 const teamLookup = computed(() => {
   const map = new Map<number, string>()
   leaderboardData.value?.teams?.forEach((team) => {
@@ -36,7 +68,7 @@ const teamLookup = computed(() => {
   return map
 })
 
-const topPlayers = computed(() => {
+const topPlayers = computed<LeaderboardCardPlayer[]>(() => {
   if (!leaderboardData.value?.players?.length) {
     return []
   }
@@ -52,18 +84,19 @@ const topPlayers = computed(() => {
     team: teams.get(player.team_id) ?? '',
     salary: getSalaryValue(player),
     generalScore: player.contract.score,
+    link: playerLink(player.id),
+    headshot: player.headshot,
   }))
 })
 
 const primaryPlayers = computed(() => topPlayers.value.slice(0, 5))
-const condensedPlayers = computed(() => topPlayers.value.slice(5, 10))
 
-const player10minOrMore = computed(() =>
+const player10minOrMore = computed<PlayerContract[]>(() =>
   leaderboardData.value?.players?.filter((player) => player.minutes_per_game > 10) ?? [],
 )
 
 const buildTopMetricList = (valueSelector: (player: PlayerContract) => number) =>
-  computed(() =>
+  computed<PlayerContract[]>(() =>
     player10minOrMore.value
       .filter((player) => valueSelector(player) > 0)
       .slice()
@@ -77,47 +110,54 @@ const topPassers = buildTopMetricList((player) => player.contract.dollars_per_as
 const topStealers = buildTopMetricList((player) => player.contract.dollars_per_steal)
 const topBlockers = buildTopMetricList((player) => player.contract.dollars_per_block)
 
-const statsCategories = computed(() => [
+const mapToStatsEntries = (
+  players: PlayerContract[],
+  valueSelector: (player: PlayerContract) => number,
+): StatsCategoryEntry[] =>
+  players.map((player) => ({
+    id: String(player.id),
+    name: player.name,
+    value: valueSelector(player),
+    link: playerLink(player.id),
+    headshot: player.headshot,
+  }))
+
+const statsCategories = computed<StatsCategory[]>(() => [
   {
     key: 'scorers',
     labelKey: 'sections.stats.scorers',
     headline: '$/PTS',
-    players: topScorers.value,
-    accessor: (player: PlayerContract) => player.contract.dollars_per_point,
+    players: mapToStatsEntries(topScorers.value, (player) => player.contract.dollars_per_point),
     highlightLeader: true,
   },
   {
     key: 'rebounders',
     labelKey: 'sections.stats.rebounders',
     headline: '$/REB',
-    players: topRebounders.value,
-    accessor: (player: PlayerContract) => player.contract.dollars_per_rebound,
+    players: mapToStatsEntries(topRebounders.value, (player) => player.contract.dollars_per_rebound),
   },
   {
     key: 'passers',
     labelKey: 'sections.stats.passers',
     headline: '$/AST',
-    players: topPassers.value,
-    accessor: (player: PlayerContract) => player.contract.dollars_per_assist,
+    players: mapToStatsEntries(topPassers.value, (player) => player.contract.dollars_per_assist),
   },
   {
     key: 'stealers',
     labelKey: 'sections.stats.stealers',
     headline: '$/STL',
-    players: topStealers.value,
-    accessor: (player: PlayerContract) => player.contract.dollars_per_steal,
+    players: mapToStatsEntries(topStealers.value, (player) => player.contract.dollars_per_steal),
   },
   {
     key: 'blockers',
     labelKey: 'sections.stats.blockers',
     headline: '$/BLK',
-    players: topBlockers.value,
-    accessor: (player: PlayerContract) => player.contract.dollars_per_block,
+    players: mapToStatsEntries(topBlockers.value, (player) => player.contract.dollars_per_block),
   },
 ])
 
 onMounted(() => {
-  leaderboardStore.ensureLeaderboardData().catch((err) => {
+  dataStore.ensureData().catch((err) => {
     console.error('Failed to load leaderboard', err)
   })
 })
@@ -141,14 +181,14 @@ onMounted(() => {
           :key="player.id ?? player.rank"
           class="leaderboard-player"
           :player="player"
+          :href="player.link"
         />
-        <PlayerListCard :list-label="t('sections.leaderboard.endoftop10')" headline="#6-10" :players="condensedPlayers">
-          <template #detail="{ player }">
-            <Tag size="small">
-              {{ player.generalScore?.toFixed(2) ?? '-' }}
-            </Tag>
-          </template>
-        </PlayerListCard>
+        <MoreCard
+          background-text="#" 
+          headline="Leaderboad"
+          href="/leaderboard"
+          :tag-label="`${ playersCount } players`"
+        />
       </div>
     </template>
   </section>
@@ -162,6 +202,7 @@ onMounted(() => {
         :list-label="t(category.labelKey)"
         :headline="category.headline"
         :players="category.players"
+        :href="category.players[0]?.link ?? '#'"
       >
         <template #term="{ player, index }">
           <template v-if="index">
@@ -171,14 +212,20 @@ onMounted(() => {
         </template>
 
         <template #detail="{ player, index }">
-          <span v-if="index" class="light">
-            {{ numberToShortUSD(category.accessor(player)) }}
+          <span v-if="category.highlightLeader && index" class="light">
+            {{ numberToShortUSD(player.value) }}
           </span>
           <Tag v-else size="small">
-            {{ numberToShortUSD(category.accessor(player)) }}
+            {{ numberToShortUSD(player.value) }}
           </Tag>
         </template>
       </PlayerListCard>
+      <MoreCard
+          background-text="$" 
+          headline="Statistics"
+          href="/stats"
+          :tag-label="`${ playersCount } players`"
+        />
     </div>
     
   </section>
@@ -204,6 +251,12 @@ onMounted(() => {
 .leaderboard-status {
   margin-top: 1rem;
   color: var(--secondary);
+}
+
+.leaderboard-count {
+  margin-top: 0.5rem;
+  color: var(--secondary);
+  font-size: 0.875rem;
 }
 
 .leaderboard-player {

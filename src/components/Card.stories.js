@@ -2,7 +2,7 @@ import Card from './Card.vue'
 
 /** @type { import('@storybook/vue3-vite').Meta<typeof Card> } */
 const meta = {
-  title: 'Components/Card',
+  title: 'Components/Cards/Card',
   component: Card,
   args: {
     default: 'This is a card. Place any content you want inside the slot.',
