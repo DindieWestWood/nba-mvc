@@ -7,6 +7,7 @@ import Tag from '@/components/Tag.vue'
 import { useDataStore } from '@/stores/dataStore'
 import type { PlayerContract } from '@/services/contractsService'
 import { useNumberTransform } from '@/transforms/number.transform'
+import { getTeamAbbr } from '@/utils/teams'
 
 const route = useRoute()
 const leaderboardStore = useDataStore()
@@ -49,12 +50,16 @@ const playerCardData = computed(() => {
   const player = playerContract.value
   if (!player) return null
   return {
-    id: String(player.id),
+    id: player.id,
     name: player.name,
     rank: playerRank.value ?? undefined,
-    team: leaderboardData.value?.teams?.find((team) => team.id === player.team_id)?.name ?? '',
+    team: getTeamAbbr(
+      leaderboardData.value?.teams?.find((team) => team.id === player.team_id)?.name ?? '',
+    ),
     salary: getSalaryValue(player),
-    generalScore: player.contract.score,
+    score: player.contract.score,
+    positions: player.positions ?? [],
+    jerseyNumber: player.jersey_number,
   }
 })
 
@@ -96,8 +101,10 @@ onMounted(() => {
         <p class="player-view__meta">
           Team:
           {{
-            leaderboardData?.teams?.find((team) => team.id === playerContract?.team_id)?.name ??
-            '—'
+            getTeamAbbr(
+              leaderboardData?.teams?.find((team) => team.id === playerContract?.team_id)?.name ??
+                '',
+            ) || '—'
           }}
         </p>
         <ul class="player-view__stats">
@@ -125,7 +132,7 @@ onMounted(() => {
 
 .player-view__status {
   padding: 2rem 0;
-  color: var(--secondary);
+  color: var(--text-secondary-color);
 }
 
 .player-view__details h2 {

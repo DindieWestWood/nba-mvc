@@ -16,15 +16,14 @@ const meta = {
   },
   args: {
     player: {
-      id: '1628973',
+      id: 1628973,
       name: 'Jalen Brunson',
       rank: 42,
-      number: 11,
+      jerseyNumber: 11,
       positions: ['PG', 'SG'],
-      team: 'New York Knicks',
+      team: 'NYC',
       salary: 24960000,
-      generalScore: 11.25,
-      headshot: 'https://cdn.nba.com/headshots/nba/latest/1040x760/1628973.png',
+      score: 11.25,
     },
   },
 }

@@ -2,11 +2,11 @@ import PlayerListCard from './PlayerListCard.vue'
 import Tag from './Tag.vue'
 
 const mockPlayers = [
-  { id: 1, name: 'Player One', value: 12.34 },
-  { id: 2, name: 'Player Two', value: 15.67 },
-  { id: 3, name: 'Player Three', value: 18.25 },
-  { id: 4, name: 'Player Four', value: 20.11 },
-  { id: 5, name: 'Player Five', value: 23.45 },
+  { id: 203999, name: 'Nikola Jokić', team: 'DEN', value: "$17.8K" },
+  { id: 1629029, name: 'Luka Dončić', team: 'DAL', value: "$38.6K" },
+  { id: 1628369, name: 'Jayson Tatum', team: 'BOS', value: "$59.4K" },
+  { id: 1628983, name: 'Shai Gilgeous-Alexander', team: 'OKC', value: "$10.2K" },
+  { id: 203507, name: 'Giannis Antetokounmpo', team: 'MIL', value: "$11.1K" },
 ]
 
 /** @type { import('@storybook/vue3-vite').Meta<typeof PlayerListCard> } */
@@ -32,11 +32,7 @@ export const Default = {
       return { args }
     },
     template: `
-      <PlayerListCard v-bind="args">
-        <template #detail="{ player }">
-          <Tag size="small">\${{ player.value.toFixed(2) }}</Tag>
-        </template>
-      </PlayerListCard>
+      <PlayerListCard v-bind="args"/>
     `,
   }),
 }

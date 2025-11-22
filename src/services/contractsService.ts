@@ -9,6 +9,7 @@ const SalarySchema = z.object({
   y4: z.number().nullable(),
   y5: z.number().nullable(),
   y6: z.number().nullable(),
+  remain_gtd: z.number(),
 })
 
 const PlayerContractStatsSchema = z.object({
@@ -82,7 +83,6 @@ const PlayerContractDetailsSchema = z.object({
   availability: z.number(),
   cost: z.number(),
   salary: SalarySchema,
-  remain_gtd: z.number(),
   dollars_per_point: z.number(),
   dollars_per_rebound: z.number(),
   dollars_per_assist: z.number(),
@@ -100,6 +100,10 @@ const PlayerContractSchema = z
     name: z.string(),
     slug: z.string(),
     nickname: z.string(),
+    jersey_number: z.number(),
+    positions: z.array(
+      z.union([z.literal('G'), z.literal('PG'), z.literal('SG'), z.literal('SF'), z.literal('PF'), z.literal('F'), z.literal('C')]),
+    ),
     team_id: z.number(),
     age: z.number(),
     minutes_per_game: z.number(),

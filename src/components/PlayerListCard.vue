@@ -1,34 +1,24 @@
 <script setup lang="ts">
-import { useAttrs } from 'vue';
-import LinkCard from './LinkCard.vue';
+import { useAttrs } from 'vue'
+import LinkCard from './LinkCard.vue'
+import Headshot from './Headshot.vue';
+import Tag from './Tag.vue';
 
 type PlayerListEntry = {
-  id?: string | number;
-  rank?: number;
+  id: number;
   name: string;
-  headshot?: string;
-} & Record<string, unknown>;
+  team: string;
+  value: string;
+}
 
 interface Props {
-  headline?: string;
+  headline: string;
   listLabel: string;
   players: PlayerListEntry[];
 }
 
-const attrs = useAttrs();
+const attrs = useAttrs()
 const props = defineProps<Props>()
-
-const getHeadshot = (player: PlayerListEntry): string | null => {
-  if (typeof player.headshot === 'string' && player.headshot.trim().length) {
-    return player.headshot;
-  }
-
-  if (player.id) {
-    return `https://cdn.nba.com/headshots/nba/latest/1040x760/${player.id}.png`;
-  }
-
-  return null;
-}
 
 </script>
 <template>
@@ -40,23 +30,29 @@ const getHeadshot = (player: PlayerListEntry): string | null => {
       </p>
     </slot>
     <dl class="player-list-card__list" :aria-label="props.listLabel">
-      <template v-for="(player, index) in players" :key="player.id ?? player.rank">
+      <template v-for="(player, index) in players" :key="player.id">
         <dt>
-          <slot name="term" :player :index>
+          <slot name="term" :player="player" :index="index">
             <div class="player-list-card__player">
-              <img
-                v-if="getHeadshot(player)"
-                class="player-list-card__avatar"
-                :src="getHeadshot(player)!"
-                alt=""
-                loading="lazy"
-              />
-              <span>{{ player.name }}</span>
+              <Headshot :player-id="player.id" size="small"/>
+              <p>
+                <span
+                  class="player-list-card__name"
+                  :class="{ 'player-list-card__leader': index === 0 }"
+                >
+                  {{ player.name }}
+                </span>
+                <span class="player-list-card__team" v-if="player.team">&ensp;{{ player.team }}</span>
+              </p>
             </div>
           </slot>
         </dt>
         <dd>
-          <slot name="detail" :player="player" :index></slot>
+          <slot name="detail" :player="player" :index="index">
+            <component :is="!!index ? 'span' : Tag">
+              {{ player.value }}
+            </component>
+          </slot>
         </dd>
       </template>
     </dl>
@@ -96,13 +92,14 @@ const getHeadshot = (player: PlayerListEntry): string | null => {
     align-items: center;
     gap: 0.5rem;
   }
+  
+  &__leader {
+    font-weight: bold;
+  }
 
-  &__avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1px solid var(--separator-color);
+  &__team {
+    font-size: 0.75rem;
+    color: var(--text-secondary-color);
   }
 }
 </style>

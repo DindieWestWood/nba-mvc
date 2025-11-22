@@ -51,7 +51,6 @@ defineProps<Props>()
   transform: translate(-50%, -53%);
   font-family: 'Bungee Shade';
   font-size: 12rem;
-  font-weight: 800;
   opacity: 0.08;
   line-height: 1;
   pointer-events: none;

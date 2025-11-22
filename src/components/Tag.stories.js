@@ -7,11 +7,16 @@ const meta = {
   args: {
     default: 'MVP',
     size: 'regular',
+    colorSheme: 'accent',
   },
   argTypes: {
     size: {
       control: { type: 'radio' },
       options: ['small', 'regular', 'large'],
+    },
+    colorSheme: {
+      control: { type: 'radio' },
+      options: ['accent', 'stone'],
     },
   },
 }
@@ -24,6 +29,6 @@ export const Playground = {
     setup() {
       return { args }
     },
-    template: '<Tag :size="args.size">{{ args.default }}</Tag>',
+    template: '<Tag :size="args.size" :colorSheme="args.colorSheme">{{ args.default }}</Tag>',
   }),
 }

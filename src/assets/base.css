@@ -60,7 +60,8 @@
   --surface-panel: #ffffff;
   --surface-panel-border: rgba(15, 23, 42, 0.08);
   --surface-panel-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
-  --color-text-primary: var(--vt-c-text-light-1);
+  --text-primary-color: var(--stone-950);
+  --text-secondary-color: var(--stone-500);
 
   --nav-bg: linear-gradient(45deg, var(--stone-800) 0%, var(--stone-700) 100%);
   --nav-shadow: 

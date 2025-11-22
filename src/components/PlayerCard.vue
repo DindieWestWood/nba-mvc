@@ -2,67 +2,46 @@
 import { computed, useAttrs } from 'vue'
 import LinkCard from './LinkCard.vue'
 import Tag from './Tag.vue'
+import { usePlayerHeadshot } from '@/composables/usePlayerHeadshot'
+import { useNumberTransform } from '@/transforms/number.transform'
 
-const currencyFormatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  notation: "compact",
-  compactDisplay: "short",
-  maximumFractionDigits: 2
-});
+interface PlayerCardPlayer {
+  id: number
+  name: string
+  rank?: number
+  salary: number
+  score: number
+  team: string
+  positions: string[]
+  jerseyNumber?: number | string
+}
 
-const props = defineProps({
-  player: {
-    type: Object,
-    required: true
-  },
-  collapsed: {
-    type: Boolean,
-    required: false
-  },
-})
+const props = defineProps<{
+  player: PlayerCardPlayer
+}>()
 
 const attrs = useAttrs()
 
-const formattedSalary = computed(() => {
-  const value = props.player.salary
-  if (value === undefined || value === null || value === '') return '—'
-  const numeric = typeof value === 'number' ? value : Number(value)
-  return Number.isFinite(numeric) ? currencyFormatter.format(numeric) : '—'
-})
+const { numberToShortUSD } = useNumberTransform()
+const formattedSalary = computed(() => numberToShortUSD(props.player.salary))
 
 const formattedScore = computed(() => {
-  const value = props.player.generalScore
-  if (value === undefined || value === null || value === '') return '—'
+  const value = props.player.score
+  if (value === undefined || value === null) return '—'
   const numeric = typeof value === 'number' ? value : Number(value)
   return Number.isFinite(numeric) ? numeric.toFixed(2) : '—'
 })
 
-const headshotUrl = computed(() => {
-  if (props.player.headshot) {
-    return props.player.headshot
-  }
-
-  if (props.player.id) {
-    return `https://cdn.nba.com/headshots/nba/latest/1040x760/${props.player.id}.png`
-  }
-
-  return 'https://cdn.nba.com/headshots/nba/latest/1040x760/203507.png'
-})
+const { getHeadshotUrl } = usePlayerHeadshot()
+const headshotUrl = computed(() => getHeadshotUrl('medium', props.player.id))
 
 const numberAndMeta = computed(() => {
-  const segments = []
-  if (props.player.number) {
-    segments.push(`#${props.player.number}`)
+  const segments: string[] = []
+  if (props.player.jerseyNumber) {
+    segments.push(`#${props.player.jerseyNumber}`)
   }
   if (props.player.positions?.length) {
-    const positions = Array.isArray(props.player.positions)
-      ? props.player.positions.join(', ')
-      : props.player.positions
-    segments.push(positions)
-  }
-  if (props.player.team) {
-    segments.push(props.player.team)
+    segments.push(props.player.positions.join(', '))
   }
   return segments.join(' | ')
 })
@@ -70,7 +49,7 @@ const numberAndMeta = computed(() => {
 
 <template>
   <LinkCard v-bind="attrs">
-    <article class="player-card" :class="{ collapsed: props.collapsed }" :aria-label="player.name">
+    <article class="player-card" :aria-label="player.name">
       <p class="player-card__rank">
         #{{ player.rank ?? '' }}
       </p>
@@ -86,16 +65,15 @@ const numberAndMeta = computed(() => {
         </div>
       </dl>
       
-      <figure class="player-card__headshot" v-if="!collapsed">
-        <img
-          :src="headshotUrl"
-          alt=""
-          loading="lazy"
-        />
+      <figure class="player-card__headshot">
+        <img :src="headshotUrl" alt="" loading="lazy"/>
       </figure>
 
       <div class="player-card__details">
-        <p class="player-card__name">{{ player.name }}</p>
+        <p>
+          <span class="player-card__name">{{ player.name }}</span>
+          <span class="player-card__team" v-if="player.team">&ensp;{{ player.team }}</span>
+        </p>
         <p class="player-card__meta">{{ numberAndMeta }}</p>
       </div>
     </article>
@@ -130,7 +108,7 @@ const numberAndMeta = computed(() => {
   padding-bottom: 1rem;
 
   dt {
-    color: var(--secondary);
+    color: var(--text-secondary-color);
     margin-left: 0.5rem;
     font-size: 0.75rem;
   }
@@ -160,24 +138,18 @@ const numberAndMeta = computed(() => {
 }
 
 .player-card__name {
-  font-size: 1.125rem;
   font-weight: bold;
   margin: 0;
 }
 
+.player-card__team {
+  font-size: 0.75rem;
+  color: var(--text-secondary-color);
+
+}
+
 .player-card__meta {
   font-size: 0.75rem;
-  color: var(--secondary);
+  color: var(--text-secondary-color);
 }
-
-.collapsed {
-  .player-card__stats {
-    padding-left: 0.5rem;
-    grid-area: 1 / 2 / 3 / 3;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: end;
-  }
-}
-
 </style>

@@ -2,34 +2,33 @@
 import { computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
-import PlayerCard from '../components/PlayerCard.vue'
+import PlayerCard from '@/components/PlayerCard.vue'
 import Headline from '@/components/Headline.vue'
 import { useDataStore } from '@/stores/dataStore'
 import type { PlayerContract } from '@/services/contractsService'
-import Tag from '@/components/Tag.vue'
 import PlayerListCard from '@/components/PlayerListCard.vue'
 import { useNumberTransform } from '@/transforms/number.transform'
 import MoreCard from '@/components/MoreCard.vue'
+import { getTeamAbbr } from '@/utils/teams'
 
 interface LeaderboardCardPlayer {
-  id: string
+  id: number
   name: string
   rank: number
-  number?: number
-  positions?: string[] | string
+  positions: string[]
   team: string
   salary: number
-  generalScore: number
+  score: number
   link: string
-  headshot?: string
+  jerseyNumber?: number
 }
 
-interface StatsCategoryEntry {
-  id: string
+interface StatsCategoryEntry extends Record<string, unknown> {
+  id: number
   name: string
-  value: number
+  value: string
+  team?: string
   link: string
-  headshot?: string
 }
 
 interface StatsCategory {
@@ -63,7 +62,7 @@ const playerLink = (id: string | number) => `/players/${id}`
 const teamLookup = computed(() => {
   const map = new Map<number, string>()
   leaderboardData.value?.teams?.forEach((team) => {
-    map.set(team.id, team.name)
+    map.set(team.id, getTeamAbbr(team.name))
   })
   return map
 })
@@ -76,16 +75,15 @@ const topPlayers = computed<LeaderboardCardPlayer[]>(() => {
   const teams = teamLookup.value
 
   return leaderboardData.value.players.slice(0, 10).map((player, index) => ({
-    id: String(player.id),
+    id: player.id,
     name: player.name,
     rank: index + 1,
-    number: undefined,
-    positions: undefined,
+    positions: player.positions ?? [],
     team: teams.get(player.team_id) ?? '',
     salary: getSalaryValue(player),
-    generalScore: player.contract.score,
+    score: player.contract.score,
     link: playerLink(player.id),
-    headshot: player.headshot,
+    jerseyNumber: player.jersey_number,
   }))
 })
 
@@ -113,14 +111,17 @@ const topBlockers = buildTopMetricList((player) => player.contract.dollars_per_b
 const mapToStatsEntries = (
   players: PlayerContract[],
   valueSelector: (player: PlayerContract) => number,
-): StatsCategoryEntry[] =>
-  players.map((player) => ({
-    id: String(player.id),
+): StatsCategoryEntry[] => {
+  const teams = teamLookup.value
+
+  return players.map((player) => ({
+    id: player.id,
     name: player.name,
-    value: valueSelector(player),
+    value: numberToShortUSD(valueSelector(player) || undefined),
+    team: teams.get(player.team_id) ?? '',
     link: playerLink(player.id),
-    headshot: player.headshot,
   }))
+}
 
 const statsCategories = computed<StatsCategory[]>(() => [
   {
@@ -128,7 +129,6 @@ const statsCategories = computed<StatsCategory[]>(() => [
     labelKey: 'sections.stats.scorers',
     headline: '$/PTS',
     players: mapToStatsEntries(topScorers.value, (player) => player.contract.dollars_per_point),
-    highlightLeader: true,
   },
   {
     key: 'rebounders',
@@ -185,7 +185,7 @@ onMounted(() => {
         />
         <MoreCard
           background-text="#" 
-          headline="Leaderboad"
+          :headline="t('sections.leaderboard.link')"
           href="/leaderboard"
           :tag-label="`${ playersCount } players`"
         />
@@ -203,26 +203,10 @@ onMounted(() => {
         :headline="category.headline"
         :players="category.players"
         :href="category.players[0]?.link ?? '#'"
-      >
-        <template #term="{ player, index }">
-          <template v-if="index">
-            {{ player.name }}
-          </template>
-          <strong v-else>{{ player.name }}</strong>
-        </template>
-
-        <template #detail="{ player, index }">
-          <span v-if="category.highlightLeader && index" class="light">
-            {{ numberToShortUSD(player.value) }}
-          </span>
-          <Tag v-else size="small">
-            {{ numberToShortUSD(player.value) }}
-          </Tag>
-        </template>
-      </PlayerListCard>
+      />
       <MoreCard
           background-text="$" 
-          headline="Statistics"
+          :headline="t('sections.stats.link')"
           href="/stats"
           :tag-label="`${ playersCount } players`"
         />
@@ -250,12 +234,12 @@ onMounted(() => {
 
 .leaderboard-status {
   margin-top: 1rem;
-  color: var(--secondary);
+  color: var(--text-secondary-color);
 }
 
 .leaderboard-count {
   margin-top: 0.5rem;
-  color: var(--secondary);
+  color: var(--text-secondary-color);
   font-size: 0.875rem;
 }
 
@@ -265,9 +249,5 @@ onMounted(() => {
 
 strong {
   font-weight: bold;
-}
-
-.light {
-  font-size: 0.8rem;
 }
 </style>

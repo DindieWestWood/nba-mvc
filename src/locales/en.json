@@ -12,11 +12,13 @@
     },
     "leaderboard": {
       "title": "Top of the pop",
-      "description": "Standings, rankings, and recent streaks will appear here."
+      "all": "See all",
+      "link": "Leaderboard"
     },
     "stats": {
       "title": "Way over their paygrade",
-      "description": "Player and team metrics, advanced charts, and filters coming soon."
+      "all": "See all",
+      "link": "Statistics"
     }
   },
   "theme": {
