@@ -5,8 +5,8 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <section class="panel">
-    <h1>{{ t('sections.stats.title') }}</h1>
+  <section >
+    <h2>{{ t('sections.stats.title') }}</h2>
     <p>{{ t('sections.stats.description') }}</p>
   </section>
 </template>

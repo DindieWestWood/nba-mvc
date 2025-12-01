@@ -4,13 +4,13 @@ import Star from './Star.vue';
 import { useScreen } from '@/composables/useScreen';
 const { width } = useScreen()
 
-const scale = computed(() => width.value / 350);
+const scale = computed(() =>  Math.min(width.value / 350, 2));
 </script>
 
 <template>
   <div class="headline-container">
     <p class="headeline-prefix">NBA's</p>
-    <h1 class="headline">Most Valuable Contract</h1>
+    <h1 class="headline">Most<br/>Valuable<br/>Contract</h1>
     <div class="headline-overlay-container">
       <div class="headline-overlay">
         <p>MVC</p>
@@ -60,14 +60,13 @@ const scale = computed(() => width.value / 350);
     font-family: "Bungee Shade";
     line-height: 100%;
     text-transform: uppercase;
-    font-size: 25vw;
+    font-size: min(25vw, 11rem);
     transform: rotate(-20deg);
     color: var(--headline-overlay-color);
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    
   }
 
   .headline-stars {

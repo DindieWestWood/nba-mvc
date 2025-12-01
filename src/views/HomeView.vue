@@ -166,7 +166,7 @@ onMounted(() => {
 <template>
   <section>
     <Headline />
-    <p>{{ t('sections.home.description') }}</p>
+    <p class="home__description">{{ t('sections.home.description') }}</p>
   </section>
 
   <section class="leaderboard">
@@ -215,7 +215,12 @@ onMounted(() => {
   </section>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.home {
+  &__description {
+    max-width: 380px;
+  } 
+}
 .leaderboard,
 .stats {
   padding-bottom: 4rem;

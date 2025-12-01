@@ -12,8 +12,6 @@ interface PlayerCardPlayer {
   salary: number
   score: number
   team: string
-  positions: string[]
-  jerseyNumber?: number | string
 }
 
 const props = defineProps<{
@@ -34,17 +32,6 @@ const formattedScore = computed(() => {
 
 const { getHeadshotUrl } = usePlayerHeadshot()
 const headshotUrl = computed(() => getHeadshotUrl('medium', props.player.id))
-
-const numberAndMeta = computed(() => {
-  const segments: string[] = []
-  if (props.player.jerseyNumber) {
-    segments.push(`#${props.player.jerseyNumber}`)
-  }
-  if (props.player.positions?.length) {
-    segments.push(props.player.positions.join(', '))
-  }
-  return segments.join(' | ')
-})
 </script>
 
 <template>
@@ -74,7 +61,6 @@ const numberAndMeta = computed(() => {
           <span class="player-card__name">{{ player.name }}</span>
           <span class="player-card__team" v-if="player.team">&ensp;{{ player.team }}</span>
         </p>
-        <p class="player-card__meta">{{ numberAndMeta }}</p>
       </div>
     </article>
   </LinkCard>
@@ -146,10 +132,5 @@ const numberAndMeta = computed(() => {
   font-size: 0.75rem;
   color: var(--text-secondary-color);
 
-}
-
-.player-card__meta {
-  font-size: 0.75rem;
-  color: var(--text-secondary-color);
 }
 </style>

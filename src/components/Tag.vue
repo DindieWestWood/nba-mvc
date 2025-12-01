@@ -39,6 +39,7 @@ const props = withDefaults(
 }
 
 .tag--regular {
+  font-size: 1rem;
   padding: 0.25rem 0.85rem;
 }
 

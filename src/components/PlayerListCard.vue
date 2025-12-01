@@ -7,7 +7,7 @@ import Tag from './Tag.vue';
 type PlayerListEntry = {
   id: number;
   name: string;
-  team: string;
+  team?: string;
   value: string;
 }
 
@@ -49,7 +49,7 @@ const props = defineProps<Props>()
         </dt>
         <dd>
           <slot name="detail" :player="player" :index="index">
-            <component :is="!!index ? 'span' : Tag">
+            <component :is="!!index ? 'span' : Tag" :class="{ 'player-list-card__value': !!index }" size="small">
               {{ player.value }}
             </component>
           </slot>
@@ -81,6 +81,7 @@ const props = defineProps<Props>()
     column-gap: 0.5rem;
     row-gap: 0.25rem;
     justify-content: stretch;
+    align-items: center;
 
     & dd {
      text-align: center;
@@ -100,6 +101,10 @@ const props = defineProps<Props>()
   &__team {
     font-size: 0.75rem;
     color: var(--text-secondary-color);
+  }
+
+  &__value {
+    font-size: 0.85rem;
   }
 }
 </style>

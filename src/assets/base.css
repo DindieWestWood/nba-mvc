@@ -101,7 +101,11 @@
     -2px 2px 8px 2px var(--stone-950-25);
 
   --separator-color: var(--stone-300);
-
+  --search-button-color: var(--stone-500);
+  --search-button-hover-bg: linear-gradient(45deg, var(--stone-300) 0%, var(--stone-200) 100%);
+  --search-button-hover-color: var(--stone-600);
+  --search-button-active-bg: linear-gradient(45deg, var(--stone-400) 0%, var(--stone-300) 100%);
+  --search-button-active-color: var(--stone-700);
 }
 
 :root[data-theme='dark'] {

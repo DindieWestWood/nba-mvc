@@ -30,7 +30,7 @@ defineProps<Props>()
 .more-card {
   position: relative;
   overflow: hidden;
-  min-height: 160px;
+  min-height: 280px;
   padding: 3rem 1.5rem;
 }
 

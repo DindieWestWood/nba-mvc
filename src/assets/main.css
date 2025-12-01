@@ -19,7 +19,7 @@ h1 {
   font-weight: 900;
   line-height: 80%;
   text-transform: uppercase;
-  font-size: 35vw;
+  font-size: min(35vw, 15rem);
   color: var(--stone-color-200);
 }
 

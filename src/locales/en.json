@@ -21,6 +21,9 @@
       "link": "Statistics"
     }
   },
+  "leaderboard": {
+    "title": "Leaderboard"
+  },
   "theme": {
     "toggle": {
       "toLight": "Switch to light theme",

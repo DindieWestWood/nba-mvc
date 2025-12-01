@@ -31,7 +31,7 @@ onMounted(() => {
   width: 100vw;
   height: 100vh;
   background: var(--surface-body);
-  color: var(--color-text-primary);
+  color: var(--text-primary-color);
   font-family: var(--font-family-base);
   overflow: hidden;
 }
