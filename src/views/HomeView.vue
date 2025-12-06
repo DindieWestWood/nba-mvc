@@ -216,6 +216,11 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+section {
+  margin-top: 2.5rem;
+  padding: 1rem 1.5rem;
+}
+
 .home {
   &__description {
     max-width: 380px;
@@ -230,7 +235,6 @@ onMounted(() => {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
-  margin-top: 2rem;
 }
 
 .leaderboard-grid.condensed {

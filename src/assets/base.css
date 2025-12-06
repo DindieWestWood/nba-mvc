@@ -53,6 +53,19 @@
   --stone-800: #292524;
   --stone-900: #1C1917;
   --stone-950: #0c0a09; --stone-950-5: rgba(12, 10, 9, 0.05); --stone-950-25: rgba(12, 10, 9, 0.25); --stone-950-40: rgba(12, 10, 9, 0.4);
+
+  --red-50: #fef2f2; --red-50-25: rgba(254, 242, 242, 0.25);
+  --red-100: #fee2e2;
+  --red-200: #fecaca;
+  --red-300: #fca5a5;
+  --red-400: #f87171;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+  --red-700: #b91c1c;
+  --red-800: #991b1b;
+  --red-900: #7f1d1d;
+  --red-950: #450a0a; --red-950-10: rgba(69, 10, 10, 0.1);
+
 }
 
 :root {
@@ -100,12 +113,22 @@
     -1px 1px 2px 1px var(--stone-950-25),
     -2px 2px 8px 2px var(--stone-950-25);
 
+
+  --red-shadow:
+    inset -3px 0 2px 2px var(--red-50-25),
+    inset 0 3px 2px 2px var(--red-50-25),
+    inset 3px 0 2px 2px var(--red-950-10),
+    inset 0 -3px 2px 2px var(--red-950-10);
+
   --separator-color: var(--stone-300);
   --search-button-color: var(--stone-500);
   --search-button-hover-bg: linear-gradient(45deg, var(--stone-300) 0%, var(--stone-200) 100%);
   --search-button-hover-color: var(--stone-600);
   --search-button-active-bg: linear-gradient(45deg, var(--stone-400) 0%, var(--stone-300) 100%);
   --search-button-active-color: var(--stone-700);
+
+  --player-view-header-bg: linear-gradient(45deg, var(--stone-100) 0%, var(--stone-100) 100%),
+                           linear-gradient(45deg, var(--accent-400) 0%, var(--accent-200) 100%);
 }
 
 :root[data-theme='dark'] {
@@ -145,6 +168,10 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  padding-bottom: 4rem;
 }
 
 .visually-hidden {

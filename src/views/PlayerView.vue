@@ -2,34 +2,21 @@
 import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import PlayerCard from '@/components/PlayerCard.vue'
-import Tag from '@/components/Tag.vue'
 import { useDataStore } from '@/stores/dataStore'
-import type { PlayerContract } from '@/services/contractsService'
-import { useNumberTransform } from '@/transforms/number.transform'
-import { getTeamAbbr } from '@/utils/teams'
+import { usePlayerHeadshot } from '@/composables/usePlayerHeadshot'
+import Card from '@/components/Card.vue'
+import Tag from '@/components/Tag.vue'
 
 const route = useRoute()
 const leaderboardStore = useDataStore()
-const { leaderboardData, isLoading, error } = storeToRefs(leaderboardStore)
-const { numberToShortUSD } = useNumberTransform()
+const { getHeadshotUrl } = usePlayerHeadshot();
+const { leaderboardData } = storeToRefs(leaderboardStore)
 
 const playerId = computed(() => String(route.params.id ?? ''))
 
 const ensureData = () => leaderboardStore.ensureData()
 
-const getSalaryValue = (player: PlayerContract): number => {
-  const { salary } = player.contract
-  return (
-    salary.y1 ??
-    salary.y2 ??
-    salary.y3 ??
-    salary.y4 ??
-    salary.y5 ??
-    salary.y6 ??
-    0
-  )
-}
+const headshotUrl = computed(() => playerContract.value?.id ? getHeadshotUrl('medium', playerContract.value.id) : null)
 
 const sortedPlayers = computed(() => {
   if (!leaderboardData.value?.players?.length) return []
@@ -44,34 +31,29 @@ const playerContract = computed(() => {
 const playerRank = computed(() => {
   const index = sortedPlayers.value.findIndex((player) => player === playerContract.value)
   return index >= 0 ? index + 1 : null
-})
+});
 
-const playerCardData = computed(() => {
-  const player = playerContract.value
-  if (!player) return null
-  return {
-    id: player.id,
-    name: player.name,
-    rank: playerRank.value ?? undefined,
-    team: getTeamAbbr(
-      leaderboardData.value?.teams?.find((team) => team.id === player.team_id)?.name ?? '',
-    ),
-    salary: getSalaryValue(player),
-    score: player.contract.score,
-    positions: player.positions ?? [],
-    jerseyNumber: player.jersey_number,
-  }
-})
-
-const statsList = computed(() => {
-  const player = playerContract.value
-  if (!player) return []
+const summaryStats = computed(() => {
   return [
-    { label: 'Contract score', value: player.contract.score.toFixed(2) },
-    { label: 'Performance', value: player.contract.performance.toFixed(2) },
-    { label: 'Impact', value: player.contract.impact.toFixed(2) },
-    { label: 'Availability', value: player.contract.availability.toFixed(2) },
-    { label: 'Cost', value: numberToShortUSD(player.contract.salary.y1 ?? 0) },
+    {
+      label: 'SCR.',
+      value: playerContract.value ? playerContract.value.contract.score.toFixed(2) : '—',
+    },
+    {
+      label: 'AVAIL.',
+      title: 'availability',
+      value: playerContract.value ? playerContract.value.contract.availability.toFixed(2) : '—',
+    },
+    {
+      label: 'IMPCT.',
+      title: 'impact',
+      value: playerContract.value ? playerContract.value.contract.impact.toFixed(2) : '—',
+    },
+    {
+      label: 'PERF.',
+      title: 'performance',
+      value: playerContract.value ? playerContract.value.contract.performance.toFixed(2) : '—',
+    },
   ]
 })
 
@@ -83,74 +65,185 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="player-view">
-    <div v-if="isLoading" class="player-view__status">Loading player data…</div>
-    <div v-else-if="error" class="player-view__status">Unable to load player data.</div>
-    <template v-else>
-      <PlayerCard
-        v-if="playerCardData"
-        class="player-view__card"
-        :player="playerCardData"
-      />
-      <div v-else class="player-view__status">
-        Player not found.
+  <div class="player-view">
+    <div class="player-view__header">
+      <span class="player-view__header-background"></span>
+      <div class="player-view__headshot">
+        <img v-if="headshotUrl" :src="headshotUrl" :alt="playerContract?.name" />
       </div>
-
-      <div v-if="playerContract" class="player-view__details">
-        <h2>{{ playerContract.name }}</h2>
-        <p class="player-view__meta">
-          Team:
-          {{
-            getTeamAbbr(
-              leaderboardData?.teams?.find((team) => team.id === playerContract?.team_id)?.name ??
-                '',
-            ) || '—'
-          }}
+      <div class="player-view__description">
+        <p class="player-view__rank">
+          <strong>{{ playerRank }}</strong>/{{ sortedPlayers.length }}
         </p>
-        <ul class="player-view__stats">
-          <li v-for="stat in statsList" :key="stat.label">
-            <span>{{ stat.label }}</span>
-            <Tag size="small">{{ stat.value }}</Tag>
-          </li>
-        </ul>
-      </div>
-    </template>
-  </section>
+        <h2 class="player-view__name">
+          {{ playerContract?.name }}
+        </h2>
+        <p class="player-view__info">#{{ playerContract?.jersey_number }} | {{ playerContract?.positions.join(', ') }} | {{  }}</p>
+          
+        <div class="player-view__stats-summary-container">
+          <Card class="player-view__stats-summary">
+            <dl>
+              <div v-for="stat in summaryStats" :key="stat.label">
+                <dt :title="stat.title">{{ stat.label }}</dt>
+                <dd aria-describedby="">
+                  <Tag size="small">{{ stat.value }}</Tag>
+                </dd>
+              </div>
+            </dl>
+          </Card>
+          <div class="player-view__stats-summary-legends" aria-hidden="true">
+            <div id="above-league-median-legend" class="player-view__stats-summary-legend">
+              <Tag size="small"></Tag>
+              <span >Above Median</span>
+            </div>
+            <div id="below-league-median-legend" class="player-view__stats-summary-legend">
+              <Tag size="small" color-sheme="red"></Tag>
+              <span >Below Median</span>
+            </div>
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .player-view {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  padding-bottom: 4rem;
+
+  &__header {
+    display: grid;
+    position: relative;
+  }
+
+  &__header-background {
+    grid-area: 1 / 1 / 2 / 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--player-view-header-bg);
+    z-index: 0;
+    box-shadow: inset 0 -4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  &__headshot {
+    grid-area: 1 / 1 / 2 / 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    max-height: 220px;
+    padding-top: 2rem;
+    z-index: 1;
+
+    img {
+      object-fit: contain;
+      max-height: 100%;
+      max-width: 100%;
+    }
+  }
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+
+  &__rank {
+    font-size: 12px;
+
+    & strong {
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+
+  &__name {
+    text-box-edge: cap alphabetic;
+    text-box-trim: trim-both;
+  }
+
+  &__info {
+    color: var(--text-secondary-color);
+    font-size: 12px;
+  }
+
+  &__stats-summary-container {
+    max-width: 380px;
+  }
+
+  &__stats-summary {
+    margin-top: 2rem;
+    padding: 1rem;
+
+    dl {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: .5rem;
+      justify-content: space-between;
+
+      div {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        width: 100%;&
+
+        dt {
+          font-size: 12px;
+          color: var(--text-secondary-color);
+          margin-left: .5rem;
+        }
+
+        dd {
+          margin: 0;
+
+          & > * {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  &__stats-summary-legends {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 1rem;
+    row-gap: .25rem;
+    column-gap: 1rem;
+    justify-content: center;
+
+    margin-top: .5rem;
+  }
+
+  &__stats-summary-legend {
+    display: flex;
+    align-items: stretch;
+    gap: .5rem;
+    font-size: 12px;
+    color: var(--text-secondary-color);
+    text-align: left;
+
+    & > *:first-child {
+      min-width: 40px;
+    }
+  }
 }
 
-.player-view__card {
-  max-width: 600px;
-}
-
-.player-view__status {
-  padding: 2rem 0;
-  color: var(--text-secondary-color);
-}
-
-.player-view__details h2 {
-  margin: 0;
-}
-
-.player-view__stats {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.player-view__stats li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+@media screen and (min-width: 360px) {
+  .player-view {
+    &__stats-summary {
+      dl {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+  }
+  
 }
 </style>

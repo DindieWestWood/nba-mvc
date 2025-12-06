@@ -66,6 +66,44 @@ const TEAM_ABBR: Record<string, string> = {
   wizards: 'WAS',
 }
 
+const TEAM_NAMES: Record<string, string> = {
+  // abbreviations
+  ATL: 'Atlanta Hawks',
+  BOS: 'Boston Celtics',
+  BKN: 'Brooklyn Nets',
+  CHA: 'Charlotte Hornets',
+  CHI: 'Chicago Bulls',
+  CLE: 'Cleveland Cavaliers',
+  DAL: 'Dallas Mavericks',
+  DEN: 'Denver Nuggets',
+  DET: 'Detroit Pistons',
+  GSW: 'Golden State Warriors',
+  HOU: 'Houston Rockets',
+  IND: 'Indiana Pacers',
+  LAC: 'LA Clippers',
+  LAL: 'LA Lakers',
+  MEM: 'Memphis Grizzlies',
+  MIA: 'Miami Heat',
+  MIL: 'Milwaukee Bucks',
+  MIN: 'Minnesota Timberwolves',
+  NOP: 'New Orleans Pelicans',
+  NYK: 'New York Knicks',
+  OKC: 'Oklahoma City Thunder',
+  ORL: 'Orlando Magic',
+  PHI: 'Philadelphia 76ers',
+  PHX: 'Phoenix Suns',
+  POR: 'Portland Trail Blazers',
+  SAC: 'Sacramento Kings',
+  SAS: 'San Antonio Spurs',
+  TOR: 'Toronto Raptors',
+  UTA: 'Utah Jazz',
+  WAS: 'Washington Wizards',
+}
+
+export const getTeamName = (teamAbbr: string): string => {
+  return TEAM_NAMES[teamAbbr] ?? teamAbbr
+}
+
 export const getTeamAbbr = (teamNameOrSlug: string): string => {
   const key = teamNameOrSlug?.trim().toLowerCase()
   if (!key) return teamNameOrSlug

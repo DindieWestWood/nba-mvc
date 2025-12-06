@@ -2,7 +2,7 @@
 const props = withDefaults(
   defineProps<{
     size?: 'small' | 'regular' | 'large'
-    colorSheme?: 'accent' | 'stone'
+    colorSheme?: 'accent' | 'stone' | 'red'
   }>(),
   {
     size: 'regular',
@@ -58,5 +58,11 @@ const props = withDefaults(
   --tag-bg: linear-gradient(45deg, var(--stone-200) 0%, var(--stone-100) 100%);
   --tag-shadow: var(--card-shadow);
   --tag-color: var(--stone-700);
+}
+
+.tag--red {
+  --tag-bg: linear-gradient(45deg, var(--red-200) 0%, var(--red-300) 100%);
+  --tag-shadow: var(--red-shadow);
+  --tag-color: var(--red-900);
 }
 </style>

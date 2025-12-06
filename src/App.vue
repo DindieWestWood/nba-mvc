@@ -49,17 +49,14 @@ header {
 
 main {
   overflow: auto;
+  min-height: 100vh;
 }
+
 
 .nav-ctn {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.content {
-  min-height: 100vh;
-  padding: 2rem clamp(1rem, 4vw, 4rem);
 }
 
 :global(.panel) {

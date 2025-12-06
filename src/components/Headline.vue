@@ -32,6 +32,7 @@ const scale = computed(() =>  Math.min(width.value / 350, 2));
 <style scoped lang="scss">
   .headline-container {
     position: relative;
+    width: fit-content;
   }
 
   .headeline-prefix {
